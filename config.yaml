@@ -1,0 +1,16 @@
+display:
+  inverted: false
+  maximalist: false
+  feedurl: https://coinlist.me/news/feed/
+  vcom: -2.61
+  coinnames: false
+ticker:
+  currency: bitcoin, ethereum, polkadot, binancecoin
+  exchange: default
+  fiatcurrency: usd
+  updatefrequency: 90
+  sparklinedays: 1
+  coinsperpage: 4
+function: 
+  mode: crypto, redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes
+  weight: 20, 1, 1, 1, 1, 1
