@@ -1,0 +1,16 @@
+display:
+  inverted: false
+  maximalist: false
+  feedurl: https://bitcoinmagazine.com/feed 
+  vcom: -2.61
+  coinnames: false 
+ticker:
+  currency: bitcoin, ethereum, polkadot, cardano, bitcoin, binancecoin, chainlink, solana
+  exchange: default
+  fiatcurrency: usd
+  updatefrequency: 60
+  sparklinedays: 1
+  coinsperpage: 4
+function: 
+  mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes
+  weight: 1, 0, 0, 0, 0, 0
