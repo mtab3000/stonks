@@ -500,7 +500,7 @@ def updateDisplay(image,config,allprices, volumes):
             pricenowstring =str(format(int(pricenow),","))
         elif pricenow < 1000 and d == -1:
             pricenowstring ="{:.2f}".format(pricenow)
-        elif pricenow<0.01:
+        elif pricenow<0.1:
             pricenowstring ="{:.3g}".format(pricenow)
         else:
             pricenowstring ="{:.5g}".format(pricenow)
