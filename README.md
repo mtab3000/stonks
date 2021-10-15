@@ -34,8 +34,12 @@ Uses code based on the stuff at [btcticker](http://github.com/llvllch/btcticker)
 
 # Installation
 
+Get up-to-date with
+    
+    sudo apt-get update
+    sudo apt-get upgrade
 
-First, enable spi and clone this repository using
+then, enable spi and clone this repository using
 
     sudo raspi-config nonint do_spi 0
     git clone https://github.com/llvllch/stonks
