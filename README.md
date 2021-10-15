@@ -66,6 +66,35 @@ function:
 ```
 Means that on each iteration there is a 40/1/1 weighting that the code will choose the functions crypto, redditquotes and guardianheadlines respectively.
 
+# Add Autostart
+
+
+```
+cat <<EOF | sudo tee /etc/systemd/system/btcticker.service
+[Unit]
+Description=btcticker
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 -u /home/pi/stonks/cryptotick.py
+WorkingDirectory=/home/pi/stonks/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+Now, simply enable the service you just made and reboot
+```  
+sudo systemctl enable btcticker.service
+sudo systemctl start btcticker.service
+
+sudo reboot
+```
+
 # Video
 
 [![video](https://img.youtube.com/vi/-270Nn1V2hQ/0.jpg)](https://www.youtube.com/watch?v=Xv8eyp-LJJk)
