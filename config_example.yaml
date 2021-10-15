@@ -5,12 +5,12 @@ display:
   vcom: -2.61
   coinnames: false 
 ticker:
-  currency: bitcoin, ethereum, cardano, chainlink, cosmos, solana,polymath
+  currency: bitcoin, ethereum, cardano, binance-coin
   exchange: default
   fiatcurrency: usd
   updatefrequency: 60
-  sparklinedays: 1
-  coinsperpage: 3
+  sparklinedays: 14
+  coinsperpage: 4
 function: 
   mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes
   weight: 1, 0, 0, 0, 0, 0
