@@ -5,7 +5,7 @@ display:
   vcom: -2.61
   coinnames: false 
 ticker:
-  currency: bitcoin, ethereum, cardano, binance-coin
+  currency: bitcoin, ethereum, cardano, binancecoin
   exchange: default
   fiatcurrency: usd
   updatefrequency: 60
@@ -13,4 +13,4 @@ ticker:
   coinsperpage: 4
 function: 
   mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes
-  weight: 1, 0, 0, 0, 0, 0
+  weight: 20, 1, 1, 1, 0, 0
