@@ -614,11 +614,12 @@ def display_image_8bpp(display, img, config):
     dims = (display.width, display.height)
     img.thumbnail(dims)
     paste_coords = [dims[i] - img.size[i] for i in (0,1)]  # align image with bottom of display
-    # If the config file contains offset coordinates that are nonzero, shift the image by those coordinates
+    # If the config file contains offset coordinates that are nonzero, shift the image by those coordinates 
+    # (relative to origin at the bottom left of the screen)
     if 'xshift' in config['display'] and int(config['display']['xshift'])>0:
         paste_coords[0]=paste_coords[0]-int(config['display']['xshift'])
     if 'yshift' in config['display'] and int(config['display']['yshift'])>0:
-        paste_coords[1]=paste_coords[1]-int(config['display']['yshift'])
+        paste_coords[1]=paste_coords[1]+int(config['display']['yshift'])
     img=img.rotate(180, expand=True)
     if config['display']['inverted']==True:
         img = ImageOps.invert(img)
