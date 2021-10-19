@@ -4,6 +4,8 @@ display:
   feedurl: https://bitcoinmagazine.com/feed 
   vcom: -2.61
   coinnames: false 
+  xshift: 0
+  yshift: 0
 ticker:
   currency: bitcoin, ethereum, cardano, chainlink, cosmos, solana,polymath
   exchange: default
