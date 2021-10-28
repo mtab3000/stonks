@@ -1,7 +1,7 @@
 display:
   inverted: false
   maximalist: false
-  feedurl: bitcoinmagazine.com/.rss/full/
+  feedurl: https://bitcoinmagazine.com/.rss/full/
   vcom: -2.61
   coinnames: false 
   xshift: 0
