@@ -34,9 +34,12 @@ quotesfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'data/quot
 
 def mempool(img, config):
     feesurl='https://mempool.space/api/v1/fees/recommended'
-    rawmempoolfees = requests.get(feesurl).json()
-    _place_text(img,str(rawmempoolfees['hourFee'])+" sat/vB fee", x_offset=-175, y_offset=-105,fontsize=50,fontstring="JosefinSans-Light")
-    success=True
+    try:
+        rawmempoolfees = requests.get(feesurl).json()
+        _place_text(img,str(rawmempoolfees['hourFee'])+" sat/vB fee", x_offset=-175, y_offset=-105,fontsize=50,fontstring="JosefinSans-Light")
+        success=True
+    except:
+        success=False
     return img, success
 
 
@@ -526,10 +529,13 @@ def updateDisplay(image,config,allprices, volumes):
     _place_text(image, "Updated: "+text+". "+str(days_ago)+" day data", x_offset=-25, y_offset=-430,fontsize=50,fontstring="JosefinSans-Medium")
     if config['display']['maximalist']==True:
         image, success=mempool(image, config)
-        d = feedparser.parse(config['display']['feedurl'])
-        numberofstories=len(d.entries)
-        logstring="STORIES:"+str(numberofstories)
-        logging.info(logstring)
+        try:
+            d = feedparser.parse(config['display']['feedurl'])
+            numberofstories=len(d.entries)
+            logstring="STORIES:"+str(numberofstories)
+            logging.info(logstring)
+        except: 
+            numberofstories=0
         y_text=45
         height= 100
         width= 37
