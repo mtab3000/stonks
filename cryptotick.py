@@ -532,7 +532,7 @@ def updateDisplay(image,config,allprices, volumes):
         try:
             d = feedparser.parse(config['display']['feedurl'])
             numberofstories=len(d.entries)
-            logstring="STORIES:"+str(numberofstories)
+            logstring="GOT STORIES, There are:"+str(numberofstories)
             logging.info(logstring)
         except: 
             numberofstories=0
