@@ -34,9 +34,12 @@ quotesfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'data/quot
 
 def mempool(img, config):
     feesurl='https://mempool.space/api/v1/fees/recommended'
-    rawmempoolfees = requests.get(feesurl).json()
-    _place_text(img,str(rawmempoolfees['hourFee'])+" sat/vB fee", x_offset=-175, y_offset=-105,fontsize=50,fontstring="JosefinSans-Light")
-    success=True
+    try:
+        rawmempoolfees = requests.get(feesurl).json()
+        _place_text(img,str(rawmempoolfees['hourFee'])+" sat/vB fee", x_offset=-175, y_offset=-105,fontsize=50,fontstring="JosefinSans-Light")
+        success=True
+    except:
+        success=False
     return img, success
 
 
@@ -500,6 +503,8 @@ def updateDisplay(image,config,allprices, volumes):
             pricenowstring =str(format(int(pricenow),","))
         elif pricenow < 1000 and d == -1:
             pricenowstring ="{:.2f}".format(pricenow)
+        elif pricenow<0.1:
+            pricenowstring ="{:.3g}".format(pricenow)
         else:
             pricenowstring ="{:.5g}".format(pricenow)
         draw = ImageDraw.Draw(image)   
@@ -524,10 +529,13 @@ def updateDisplay(image,config,allprices, volumes):
     _place_text(image, "Updated: "+text+". "+str(days_ago)+" day data", x_offset=-25, y_offset=-430,fontsize=50,fontstring="JosefinSans-Medium")
     if config['display']['maximalist']==True:
         image, success=mempool(image, config)
-        d = feedparser.parse(config['display']['feedurl'])
-        numberofstories=len(d.entries)
-        logstring="STORIES:"+str(numberofstories)
-        logging.info(logstring)
+        try:
+            d = feedparser.parse(config['display']['feedurl'])
+            numberofstories=len(d.entries)
+            logstring="GOT STORIES, There are:"+str(numberofstories)
+            logging.info(logstring)
+        except: 
+            numberofstories=0
         y_text=45
         height= 100
         width= 37
@@ -612,6 +620,12 @@ def display_image_8bpp(display, img, config):
     dims = (display.width, display.height)
     img.thumbnail(dims)
     paste_coords = [dims[i] - img.size[i] for i in (0,1)]  # align image with bottom of display
+    # If the config file contains offset coordinates that are nonzero, shift the image by those coordinates 
+    # (relative to origin at the bottom left of the screen)
+    if 'xshift' in config['display'] and int(config['display']['xshift'])>0:
+        paste_coords[0]=paste_coords[0]-int(config['display']['xshift'])
+    if 'yshift' in config['display'] and int(config['display']['yshift'])>0:
+        paste_coords[1]=paste_coords[1]+int(config['display']['yshift'])
     img=img.rotate(180, expand=True)
     if config['display']['inverted']==True:
         img = ImageOps.invert(img)

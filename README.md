@@ -34,8 +34,12 @@ Uses code based on the stuff at [btcticker](http://github.com/llvllch/btcticker)
 
 # Installation
 
+Get up-to-date with
+    
+    sudo apt-get update
+    sudo apt-get upgrade
 
-First, enable spi and clone this repository using
+then, enable spi and clone this repository using
 
     sudo raspi-config nonint do_spi 0
     git clone https://github.com/llvllch/stonks
@@ -65,6 +69,35 @@ function:
   weight: 40, 1, 0, 0,1  
 ```
 Means that on each iteration there is a 40/1/1 weighting that the code will choose the functions crypto, redditquotes and guardianheadlines respectively.
+
+# Add Autostart
+
+
+```
+cat <<EOF | sudo tee /etc/systemd/system/btcticker.service
+[Unit]
+Description=btcticker
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 -u /home/pi/stonks/cryptotick.py
+WorkingDirectory=/home/pi/stonks/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+Now, simply enable the service you just made and reboot
+```  
+sudo systemctl enable btcticker.service
+sudo systemctl start btcticker.service
+
+sudo reboot
+```
 
 # Video
 
