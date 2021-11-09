@@ -77,5 +77,5 @@ jobs:
     # Additional arguments to the sonarcloud scanner
       args: # optional
     # Set the sonar.projectBaseDir analysis property
-     projectBaseDir:
+     projectBaseDir: .
     # optional, default is .
