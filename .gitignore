@@ -134,6 +134,3 @@ config.yaml
 # Log file
 runlog.log
 .zshrc
-
-# github
-.github/workflows
