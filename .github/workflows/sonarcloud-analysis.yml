@@ -1,5 +1,5 @@
 name: SonarCloud Scan
-  uses: SonarSource/sonarcloud-github-action@v1.6
+ uses: SonarSource/sonarcloud-github-action@v1.6
   with:
-    args: # optional
+   args: # optional
     projectBaseDir: # optional, default is .
