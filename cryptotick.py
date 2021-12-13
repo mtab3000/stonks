@@ -711,9 +711,13 @@ def display_startup(display):
     paste_coords = [dims[i] - img.size[i] for i in (0,1)]  # align image with bottom of display
     # set frame buffer to gradient
     ssid=os.popen("sudo iwgetid -r").read()
+    filename = os.path.join(dirname, 'images/rabbitsq.png')
+    imlogo = Image.open(filename)
     img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
-    _place_text(img, 'WiFi: '+ ssid, x_offset=0, y_offset=-300,fontsize=50,fontstring="Roboto-Light")
+    _place_text(img, 'www.veeb.ch ' x_offset=0, y_offset=-350,fontsize=100,fontstring="Roboto-Light")
+    _place_text(img, 'Connection: '+ ssid, x_offset=0, y_offset=-300,fontsize=50,fontstring="Roboto-Light")
     _place_text(img, 'IP: '+ get_ip(), x_offset=0, y_offset=-240,fontsize=50,fontstring="Roboto-Light")
+    img.paste(imlogo,(100, 760))
     # update display
     img=img.rotate(180, expand=True)
     display.frame_buf.paste(img, paste_coords)
