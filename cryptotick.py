@@ -719,7 +719,7 @@ def display_startup(display):
     _place_text(img, 'www.veeb.ch',x_offset=0, y_offset=-350,fontsize=100,fontstring="Roboto-Light")
     _place_text(img, 'Connection: '+ ssid, x_offset=0, y_offset=-240,fontsize=50,fontstring="Roboto-Light")
     _place_text(img, 'IP: '+ get_ip(), x_offset=0, y_offset=-180,fontsize=50,fontstring="Roboto-Light")
-    img.paste(imlogo,(100, 760))
+    img.paste(imlogo,(150, 700))
     # update display
     img=img.rotate(180, expand=True)
     display.frame_buf.paste(img, paste_coords)
