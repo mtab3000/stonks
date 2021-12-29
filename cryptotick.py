@@ -550,9 +550,9 @@ def updateDisplay(image,config,allprices, volumes):
             qr.add_data(urlstring)
             qr.make(fit=True)
             theqr = qr.make_image(fill_color="#FFFFFF", back_color="#000000")
-            MAX_SIZE=(150,150)
+            MAX_SIZE=(130,130)
             theqr.thumbnail(MAX_SIZE)
-            image.paste(theqr, (1200,880))
+            image.paste(theqr, (1170,850))
         else:
             text="There is an issue with the news feed"
             image, numline=writewrappedlines(image,text,fontsize,y_text,height, width,fontstring)
