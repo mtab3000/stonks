@@ -550,7 +550,7 @@ def updateDisplay(image,config,allprices, volumes):
             qr.add_data(urlstring)
             qr.make(fit=True)
             theqr = qr.make_image(fill_color="#FFFFFF", back_color="#000000")
-            MAX_SIZE=(130,130)
+            MAX_SIZE=(180,180)
             theqr.thumbnail(MAX_SIZE)
             image.paste(theqr, (1170,850))
         else:
