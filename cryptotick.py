@@ -428,17 +428,17 @@ def makeSpark(allprices):
     logging.info("Update Sparkline graphs")    
     for key in allprices.keys():   
         logging.info(key)    
-        x = allprices[key]-np.mean(allprices[key])
+        x = allprices[key]-np.mean(allprices[key])        # Transform the prices (subtract mean)
 
-        fig, ax = plt.subplots(1,1,figsize=(10,3))
-        plt.plot(x, color='k', linewidth=3)
-        plt.plot(len(x)-1, x[-1], color='r', marker='o')
+        fig, ax = plt.subplots(1,1,figsize=(10,3))        # Choose the aspect ratio of each individual plot
+        plt.plot(x, color='k', linewidth=3)               # Draw the transformed sparkline
+        plt.plot(len(x)-1, x[-1], color='r', marker='o')  # Put a marker on the end of the sparkline. Check this (not visible)
 
         # Remove the Y axis
-        for k,v in ax.spines.items():
+        for k,v in ax.spines.items():                     # No Y axis, and x will show as mean because of transformation
             v.set_visible(False)
-        ax.set_xticks([])
-        ax.set_yticks([])
+        ax.set_xticks([])                                 # No ticks
+        ax.set_yticks([])                                 # No ticks
         ax.axhline(c='k', linewidth=2, linestyle=(0, (5, 2, 1, 2)))
 
         # Save the resulting bmp file to the images directory
