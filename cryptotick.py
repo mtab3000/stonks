@@ -431,8 +431,9 @@ def makeSpark(allprices):
         x = allprices[key]-np.mean(allprices[key])        # Transform the prices (subtract mean)
 
         fig, ax = plt.subplots(1,1,figsize=(10,3))        # Choose the aspect ratio of each individual plot
+        plt.plot(len(x)-1, x[-1], color='#777', marker='o', markersize=20)  # Put a marker on the end of the sparkline. Check this (not visible)
         plt.plot(x, color='k', linewidth=3)               # Draw the transformed sparkline
-        plt.plot(len(x)-1, x[-1], color='r', marker='o', markersize=12)  # Put a marker on the end of the sparkline. Check this (not visible)
+
 
         # Remove the Y axis
         for k,v in ax.spines.items():                     # No Y axis, and x will show as mean because of transformation
