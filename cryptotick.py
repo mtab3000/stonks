@@ -546,7 +546,7 @@ def updateDisplay(image,config,allprices, volumes):
             text=d.entries[storynum].title
             image, numline=writewrappedlines(image,text,fontsize,y_text,height, width,fontstring)
             urlstring=d.entries[storynum].link
-            qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=3,border=3,)
+            qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=3,border=1,)
             qr.add_data(urlstring)
             qr.make(fit=True)
             theqr = qr.make_image(fill_color="#FFFFFF", back_color="#000000")
