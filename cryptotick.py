@@ -1,3 +1,4 @@
+
 from time import sleep
 from random import randrange
 import argparse
@@ -431,7 +432,6 @@ def makeSpark(allprices):
         x = allprices[key]-np.mean(allprices[key])        # Transform the prices (subtract mean)
 
         fig, ax = plt.subplots(1,1,figsize=(10,3))        # Choose the aspect ratio of each individual plot
-        plt.plot(np.amax(x) x[np.amax(x)], color='#aaa', marker='o', markersize=25)  # Put a marker on the end of the sparkline. Check this (not visible)
         plt.plot(x, color='k', linewidth=3)               # Draw the transformed sparkline
 
 
