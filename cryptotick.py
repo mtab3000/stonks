@@ -253,7 +253,7 @@ def guardianheadlines(img, config):
         fontsize=90
         img, numlines=writewrappedlines(img,text,fontsize,y_text,height, width,fontstring)
         urlstring=d.entries[0].link
-        qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=3,border=0,)
+        qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=3,border=1,)
         qr.add_data(urlstring)
         qr.make(fit=True)
         theqr = qr.make_image(fill_color="#FFFFFF", back_color="#000000")
