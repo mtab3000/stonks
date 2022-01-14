@@ -1,3 +1,4 @@
+
 from time import sleep
 from random import randrange
 import argparse
@@ -253,7 +254,7 @@ def guardianheadlines(img, config):
         fontsize=90
         img, numlines=writewrappedlines(img,text,fontsize,y_text,height, width,fontstring)
         urlstring=d.entries[0].link
-        qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=3,border=0,)
+        qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=3,border=1,)
         qr.add_data(urlstring)
         qr.make(fit=True)
         theqr = qr.make_image(fill_color="#FFFFFF", back_color="#000000")
@@ -428,17 +429,17 @@ def makeSpark(allprices):
     logging.info("Update Sparkline graphs")    
     for key in allprices.keys():   
         logging.info(key)    
-        x = allprices[key]-np.mean(allprices[key])
+        x = allprices[key]-np.mean(allprices[key])        # Transform the prices (subtract mean)
 
-        fig, ax = plt.subplots(1,1,figsize=(10,3))
-        plt.plot(x, color='k', linewidth=3)
-        plt.plot(len(x)-1, x[-1], color='r', marker='o')
+        fig, ax = plt.subplots(1,1,figsize=(10,3))        # Choose the aspect ratio of each individual plot
+        plt.plot(x, color='k', linewidth=3)               # Draw the transformed sparkline
+
 
         # Remove the Y axis
-        for k,v in ax.spines.items():
+        for k,v in ax.spines.items():                     # No Y axis, and x will show as mean because of transformation
             v.set_visible(False)
-        ax.set_xticks([])
-        ax.set_yticks([])
+        ax.set_xticks([])                                 # No ticks
+        ax.set_yticks([])                                 # No ticks
         ax.axhline(c='k', linewidth=2, linestyle=(0, (5, 2, 1, 2)))
 
         # Save the resulting bmp file to the images directory
@@ -546,13 +547,13 @@ def updateDisplay(image,config,allprices, volumes):
             text=d.entries[storynum].title
             image, numline=writewrappedlines(image,text,fontsize,y_text,height, width,fontstring)
             urlstring=d.entries[storynum].link
-            qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=3,border=0,)
+            qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=3,border=1,)
             qr.add_data(urlstring)
             qr.make(fit=True)
             theqr = qr.make_image(fill_color="#FFFFFF", back_color="#000000")
-            MAX_SIZE=(150,150)
-            theqr.thumbnail(MAX_SIZE)
-            image.paste(theqr, (1200,880))
+            MAX_SIZE=130
+            theqr=theqr.resize([MAX_SIZE,MAX_SIZE])
+            image.paste(theqr, (1170,850))
         else:
             text="There is an issue with the news feed"
             image, numline=writewrappedlines(image,text,fontsize,y_text,height, width,fontstring)
@@ -711,9 +712,15 @@ def display_startup(display):
     paste_coords = [dims[i] - img.size[i] for i in (0,1)]  # align image with bottom of display
     # set frame buffer to gradient
     ssid=os.popen("sudo iwgetid -r").read()
+    filename = os.path.join(dirname, 'images/rabbitsq.png')
+    imlogo = Image.open(filename)
+    resize = 400,400
+    imlogo.thumbnail(resize)
     img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
-    _place_text(img, 'WiFi: '+ ssid, x_offset=0, y_offset=-300,fontsize=50,fontstring="Roboto-Light")
-    _place_text(img, 'IP: '+ get_ip(), x_offset=0, y_offset=-240,fontsize=50,fontstring="Roboto-Light")
+    _place_text(img, 'www.veeb.ch',x_offset=0, y_offset=-350,fontsize=100,fontstring="Roboto-Light")
+    _place_text(img, 'Connection: '+ ssid, x_offset=0, y_offset=-240,fontsize=50,fontstring="Roboto-Light")
+    _place_text(img, 'IP: '+ get_ip(), x_offset=0, y_offset=-180,fontsize=50,fontstring="Roboto-Light")
+    img.paste(imlogo,(100, 600))
     # update display
     img=img.rotate(180, expand=True)
     display.frame_buf.paste(img, paste_coords)
