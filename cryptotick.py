@@ -565,7 +565,8 @@ def updateDisplay(image,config,allprices, volumes):
             iconnodemode=False
         if iconnodemode==True:
             nodeicon = os.path.join(dirname, 'images/noderunner.png')
-            image.paste(nodeicon, (100,850))
+            nodelogo = Image.open(nodeicon)
+            image.paste(nodelogo, (100,850))
     return image
 
 
