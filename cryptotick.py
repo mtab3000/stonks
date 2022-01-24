@@ -848,7 +848,7 @@ def main():
                 imgnew, success = eval(thefunction+"(imgnew,config)")
                 if success==True:
                     img=imgnew
-                display_image_8bpp(display,img, config)
+                    display_image_8bpp(display,img, config)
                 lastrefresh=time.time()
                 if success ==True:
                     diff = (lastrefresh - starttime)
