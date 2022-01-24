@@ -18,7 +18,6 @@ import unicodedata
 import re
 import logging
 import os
-import subprocess
 import yaml 
 import time
 import socket
@@ -558,10 +557,10 @@ def updateDisplay(image,config,allprices, volumes):
         else:
             text="There is an issue with the news feed"
             image, numline=writewrappedlines(image,text,fontsize,y_text,height, width,fontstring)
-        try:
-            subprocess.call(['type','bitcoind'])
+        if os.file.exists('/usr/local/bin/bitcoind'):
+            logging.info('looks like a node')
             iconnodemode=True
-        except:
+        else:
             logging.info('not a node')
             iconnodemode=False
         if iconnodemode==True:
