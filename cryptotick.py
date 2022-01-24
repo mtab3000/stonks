@@ -18,6 +18,7 @@ import unicodedata
 import re
 import logging
 import os
+import subprocess
 import yaml 
 import time
 import socket
@@ -554,6 +555,15 @@ def updateDisplay(image,config,allprices, volumes):
             MAX_SIZE=130
             theqr=theqr.resize([MAX_SIZE,MAX_SIZE])
             image.paste(theqr, (1170,850))
+            try:
+                subprocess.run(['bitcoin-cli getconnectioncount'], check = True)
+                nodemode=True
+            except subprocess.CalledProcessError:
+                logging.info('not a node')
+                nodemode=False
+            if nodemode:
+                nodeicon = os.path.join(dirname, 'images/noderunner.png')
+                image.paste(nodeicon, (100,850))
         else:
             text="There is an issue with the news feed"
             image, numline=writewrappedlines(image,text,fontsize,y_text,height, width,fontstring)
