@@ -556,12 +556,12 @@ def updateDisplay(image,config,allprices, volumes):
             theqr=theqr.resize([MAX_SIZE,MAX_SIZE])
             image.paste(theqr, (1170,850))
             try:
-                subprocess.call(['bitcoin-cli','getconnectioncount'], check = True)
+                subprocess.call(['bitcoin-cli','getconnectioncount'])
                 iconnodemode=True
             except subprocess.CalledProcessError:
                 logging.info('not a node')
                 iconnodemode=False
-            if iconnodemode:
+            if iconnodemode==True:
                 nodeicon = os.path.join(dirname, 'images/noderunner.png')
                 image.paste(nodeicon, (100,850))
         else:
