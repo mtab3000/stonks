@@ -559,7 +559,7 @@ def updateDisplay(image,config,allprices, volumes):
             text="There is an issue with the news feed"
             image, numline=writewrappedlines(image,text,fontsize,y_text,height, width,fontstring)
         try:
-            subprocess.call(['bitcoin-cli','getconnectioncount'])
+            subprocess.call(['type','bitcoind'])
             iconnodemode=True
         except:
             logging.info('not a node')
