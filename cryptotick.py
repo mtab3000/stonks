@@ -557,7 +557,7 @@ def updateDisplay(image,config,allprices, volumes):
         else:
             text="There is an issue with the news feed"
             image, numline=writewrappedlines(image,text,fontsize,y_text,height, width,fontstring)
-        if os.file.exists('/usr/local/bin/bitcoind'):
+        if os.path.isfile('/usr/local/bin/bitcoind'):
             logging.info('looks like a node')
             iconnodemode=True
         else:
