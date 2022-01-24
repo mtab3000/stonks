@@ -555,19 +555,18 @@ def updateDisplay(image,config,allprices, volumes):
             MAX_SIZE=130
             theqr=theqr.resize([MAX_SIZE,MAX_SIZE])
             image.paste(theqr, (1170,850))
-            try:
-                subprocess.call(['bitcoin-cli','getconnectioncount'])
-                iconnodemode=True
-            except subprocess.CalledProcessError:
-                logging.info('not a node')
-                iconnodemode=False
-            if iconnodemode==True:
-                nodeicon = os.path.join(dirname, 'images/noderunner.png')
-                image.paste(nodeicon, (100,850))
         else:
             text="There is an issue with the news feed"
             image, numline=writewrappedlines(image,text,fontsize,y_text,height, width,fontstring)
-
+        try:
+            subprocess.call(['bitcoin-cli','getconnectioncount'])
+            iconnodemode=True
+        except:
+            logging.info('not a node')
+            iconnodemode=False
+        if iconnodemode==True:
+            nodeicon = os.path.join(dirname, 'images/noderunner.png')
+            image.paste(nodeicon, (100,850))
     return image
 
 
