@@ -198,7 +198,7 @@ def redditquotes(img, config):
             quote = quote.strip()
 
             if splitquote[-1]!=splitquote[0] and len(splitquote[-1])<=25:
-                img.paste(imlogo,(100, 760))
+                img.paste(imlogo,(50, 760))
                 fontstring = "JosefinSans-Light"
                 y_text= -300
                 height= 110
