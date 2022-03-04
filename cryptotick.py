@@ -148,6 +148,7 @@ def getallquotes(url):
 def redditquotes(img, config):
     try:
         logging.info("get reddit quotes")
+        numline=-1
         filename = os.path.join(dirname, 'images/rabbitsq.png')
         imlogo = Image.open(filename)
         resize = 300,300
@@ -213,6 +214,7 @@ def redditquotes(img, config):
                 draw.line((500,880, 948,880), fill=255, width=3)
     #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
                 _place_text(img,source,0,430,60,"JosefinSans-Light")
+            if numline<8 and numline >1:
                 success=True
                 break
     except Exception as e:
