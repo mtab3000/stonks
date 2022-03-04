@@ -259,18 +259,18 @@ def guardianheadlines(img, config):
         filenameaudrey = os.path.join(dirname, 'images/rabbitsq.png')
         imlogoaud = Image.open(filenameaudrey)
         resize = 300,300
-        imlogoaud.thumbnail(resize)
+        #imlogoaud.thumbnail(resize)
 
         d = feedparser.parse('https://www.theguardian.com/uk/rss')
         filename = os.path.join(dirname, 'images/guardianlogo.jpg')
         imlogo = Image.open(filename)
         resize = 800,150
         imlogo.thumbnail(resize)
-        img.paste(imlogo,(100, 100))
+        img.paste(imlogo,(100, 50))
         #img.paste(imlogoaud,(100, 760))
         text=d.entries[0].title
         fontstring="Merriweather-Light"
-        y_text=-200
+        y_text=-230
         height= 140
         width= 27
         fontsize=90
@@ -282,7 +282,7 @@ def guardianheadlines(img, config):
         theqr = qr.make_image(fill_color="#FFFFFF", back_color="#000000")
         MAX_SIZE=(130,130)
         theqr.thumbnail(MAX_SIZE)
-        img.paste(theqr, (1200,900))
+        img.paste(theqr, (1200,870))
         success=True
     except Exception as e:
         message="Interlude due to a data pull/print problem (Headlines)"
