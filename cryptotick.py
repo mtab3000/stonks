@@ -203,7 +203,7 @@ def redditquotes(img, config):
                 fontstring = "JosefinSans-Light"
                 y_text= -300
                 height= 110
-                width= 37
+                width= 42
                 fontsize=70
                 img, numline =writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
                 source = splitquote[-1]
@@ -214,7 +214,7 @@ def redditquotes(img, config):
                 draw.line((500,880, 948,880), fill=255, width=3)
     #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
                 _place_text(img,source,0,430,60,"JosefinSans-Light")
-            if numline<8 and numline >1:
+            if numline<7 and numline >1:
                 success=True
                 break
     except Exception as e:
