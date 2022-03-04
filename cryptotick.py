@@ -203,7 +203,7 @@ def redditquotes(img, config):
                 y_text= -300
                 height= 110
                 width= 37
-                fontsize=60
+                fontsize=70
                 img, numline =writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
                 source = splitquote[-1]
                 source = source.strip()
