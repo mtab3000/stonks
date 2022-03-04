@@ -278,9 +278,9 @@ def guardianheadlines(img, config):
         qr.add_data(urlstring)
         qr.make(fit=True)
         theqr = qr.make_image(fill_color="#FFFFFF", back_color="#000000")
-        MAX_SIZE=(150,150)
+        MAX_SIZE=(130,130)
         theqr.thumbnail(MAX_SIZE)
-        img.paste(theqr, (1200,930))
+        img.paste(theqr, (1200,900))
         success=True
     except Exception as e:
         message="Interlude due to a data pull/print problem (Headlines)"
