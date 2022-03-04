@@ -115,6 +115,25 @@ def textfilequotes(img, config):
             success= False
     return img, success
 
+def getallquotes(url):
+    # This gets all quotes, not just the first 100
+    quotestack = []
+    rawquotes = requests.get(url,headers={'User-agent': 'Chrome'}).json()
+    quotestack = jsontoquotestack(rawquotes, quotestack)
+    after=str(rawquotes['data']['after'])
+    while after!='None':
+        newquotes = requests.get(url+'&after='+after,headers={'User-agent': 'Chrome'}).json()
+        try:
+            quotestack = jsontoquotestack(newquotes, quotestack)
+            after=str(newquotes['data']['after'])
+        except:
+            after='None'
+        logging.info(after)
+        time.sleep(1)
+    string="We got " + str(len(quotestack)) + " quotes."
+    logging.info(string)
+    return quotestack
+
 def redditquotes(img, config):
     try:
         logging.info("get reddit quotes")
@@ -123,19 +142,7 @@ def redditquotes(img, config):
         resize = 300,300
         imlogo.thumbnail(resize)
         quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=week&limit=100'
-        rawquotes = requests.get(quoteurl,headers={'User-agent': 'Chrome'}).json()
-        quotestack = []
-        i=0
-        try:
-            length= len(rawquotes['data']['children'])
-            while i < length:
-                quotestack.append(str(rawquotes['data']['children'][i]['data']['title']))
-                i+=1
-            for key in rawquotes.keys():
-                logging.info(key)
-        except:
-            logging.info('Reddit Does Not Like You')
-
+        quotestack = getallquotes(quoteurl)
     #   Tidy quotes
         i=0
         while i<len(quotestack):
