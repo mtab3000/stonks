@@ -1,18 +1,18 @@
 display:
-  inverted: false
-  maximalist: false
+  inverted: false # If True, black background grey text
+  maximalist: false # Bitcoin Maximalist mode. Only BTC
   feedurl: https://bitcoinmagazine.com/.rss/full/
-  vcom: -2.61
-  coinnames: false 
-  xshift: 0
-  yshift: 0
+  vcom: -2.61 # This is a number specific to your epd
+  coinnames: false # Include coinnames on display
+  xshift: 0 # Pixels to shift image for fine tuning alignment
+  yshift: 0 # Pixels to shift image for fine tuning alignment
 ticker:
   currency: bitcoin, ethereum, cardano, binancecoin
-  exchange: default
+  exchange: default # if you want price from a specific exchange specify here
   fiatcurrency: usd
-  updatefrequency: 60
-  sparklinedays: 14
+  updatefrequency: 60 # Seconds (60 is the lower limit, to preserve epd)
+  sparklinedays: 14 # Days of data on graph
   coinsperpage: 4
-function: 
+function: # Extra functionality
   mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes
-  weight: 20, 1, 1, 1, 0, 0
+  weight: 20, 1, 1, 1, 0, 0 # Weighting for each of the above respectively
