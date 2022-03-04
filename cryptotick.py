@@ -160,7 +160,7 @@ def redditquotes(img, config):
             result = unicodedata.normalize('NFKD', quotestack[i]).encode('ascii', 'ignore')
             quotestack[i]=result.decode()
             i+=1
-        quotestack = by_size(quotestack, 170)
+        quotestack = by_size(quotestack, 250)
         
         while True:
             quote=random.choice (quotestack)
@@ -213,6 +213,7 @@ def redditquotes(img, config):
                 draw.line((500,880, 948,880), fill=255, width=3)
     #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
                 _place_text(img,source,0,430,60,"JosefinSans-Light")
+            if numline<8 and numline >1:
                 success=True
                 break
     except Exception as e:
