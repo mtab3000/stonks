@@ -115,6 +115,17 @@ def textfilequotes(img, config):
             success= False
     return img, success
 
+def jsontoquotestack(jsonquotes,quotestack):
+    i=0
+    try:
+        length= len(jsonquotes['data']['children'])
+        while i < length:
+            quotestack.append(str(jsonquotes['data']['children'][i]['data']['title']))
+            i+=1
+    except:
+        logging.info('Reddit Does Not Like You')
+    return quotestack
+
 def getallquotes(url):
     # This gets all quotes, not just the first 100
     quotestack = []
