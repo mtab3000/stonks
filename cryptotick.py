@@ -214,9 +214,11 @@ def redditquotes(img, config):
                 draw.line((500,880, 948,880), fill=255, width=3)
     #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
                 _place_text(img,source,0,430,70,"JosefinSans-Light")
-            if numline<7 and numline >1:
+            if numline<7 and numline >0:
                 success=True
                 break
+            else:
+                img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
     except Exception as e:
         message="Interlude due to a data pull/print problem (Reddit)"
         pic = beanaproblem(img,message)
