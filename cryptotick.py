@@ -364,7 +364,7 @@ def beanaproblem(image,message):
     thealert = Image.open(os.path.join(picdir,'arrow.png'))
 #   Migrating from the rather dramatic issue screen to drawing attention to the last
 #   update time. The persistent display takes care of the rest.
-    image.paste(thealert, (10,10))
+    image.paste(thealert, (-10,10))
     logging.info(str("Error message: " + message))
 #   Message as QR code to improve error diagnosis
     return image
