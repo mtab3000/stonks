@@ -271,9 +271,9 @@ def guardianheadlines(img, config):
         text=d.entries[0].title
         fontstring="Merriweather-Light"
         y_text=-230
-        height= 140
+        height= 120
         width= 27
-        fontsize=90
+        fontsize=70
         img, numlines=writewrappedlines(img,text,fontsize,y_text,height, width,fontstring)
         urlstring=d.entries[0].link
         qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=3,border=1,)
