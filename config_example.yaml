@@ -1,6 +1,6 @@
 display:
   inverted: false # If True, black background grey text
-  maximalist: false # Bitcoin Maximalist mode. Only BTC
+  maximalist: false # Bitcoin Maximalist mode. Only one currency with a news feed item from url below
   feedurl: https://bitcoinmagazine.com/.rss/full/
   vcom: -2.61 # This is a number specific to your epd
   coinnames: false # Include coinnames on display
