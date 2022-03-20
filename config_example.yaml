@@ -1,6 +1,6 @@
 display:
   inverted: false # If True, black background grey text
-  maximalist: false # Bitcoin Maximalist mode. Only one currency with a news feed item from url below
+  maximalist: false # Bitcoin Maximalist mode. Only one currency with a news feed item from url b
   feedurl: https://bitcoinmagazine.com/.rss/full/
   vcom: -2.61 # This is a number specific to your epd
   coinnames: false # Include coinnames on display
@@ -13,6 +13,9 @@ ticker:
   updatefrequency: 60 # Seconds (60 is the lower limit, to preserve epd)
   sparklinedays: 14 # Days of data on graph
   coinsperpage: 4
+headlines:
+  feedurl: https://rss.nytimes.com/services/xml/rss/nyt/US.xml
+  feedname: "New York Times"
 function: # Extra functionality
   mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes
   weight: 20, 1, 1, 1, 0, 0 # Weighting for each of the above respectively
