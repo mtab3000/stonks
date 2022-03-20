@@ -18,6 +18,7 @@ import unicodedata
 import re
 import logging
 import os
+import io
 import yaml 
 import time
 import socket
@@ -262,14 +263,17 @@ def guardianheadlines(img, config):
         #imlogoaud.thumbnail(resize)
         if 'headlines' in config:
             d = feedparser.parse(config['headlines']['feedurl'])
+            logourl = d['feed']['image']['href']
+            imgstream = requests.get(logourl, stream=True)
+            imlogo = Image.open(io.BytesIO(imgstream.content))
             logging.info('got headline from source')
         else:
             d = feedparser.parse('https://www.theguardian.com/uk/rss')
             filename = os.path.join(dirname, 'images/guardianlogo.jpg')
             imlogo = Image.open(filename)
-            resize = 800,150
-            imlogo.thumbnail(resize)
-            img.paste(imlogo,(60, 50))
+        resize = 800,150
+        imlogo.thumbnail(resize)
+        img.paste(imlogo,(60, 50))
         #img.paste(imlogoaud,(100, 760))
         text=d.entries[0].title
         fontstring="Merriweather-Light"
