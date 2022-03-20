@@ -269,6 +269,7 @@ def guardianheadlines(img, config):
             # put white background onto logo
             logowidth = imlogo.size[0]
             logoheight = imlogo.size[1]
+            imlogo=imlogo.convert('RGBA')
             new_image = Image.new("RGBA", (logowidth,logoheight), "WHITE")
             new_image.paste(imlogo, (0, 0), imlogo)
             imlogo=new_image 
