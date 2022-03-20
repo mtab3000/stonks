@@ -260,13 +260,15 @@ def guardianheadlines(img, config):
         imlogoaud = Image.open(filenameaudrey)
         resize = 300,300
         #imlogoaud.thumbnail(resize)
-
-        d = feedparser.parse('https://www.theguardian.com/uk/rss')
-        filename = os.path.join(dirname, 'images/guardianlogo.jpg')
-        imlogo = Image.open(filename)
-        resize = 800,150
-        imlogo.thumbnail(resize)
-        img.paste(imlogo,(60, 50))
+        if 'url' in config['headlines']:
+            d = feedparser.parse(config['headlines']['url'])
+        else:
+            d = feedparser.parse('https://www.theguardian.com/uk/rss')
+            filename = os.path.join(dirname, 'images/guardianlogo.jpg')
+            imlogo = Image.open(filename)
+            resize = 800,150
+            imlogo.thumbnail(resize)
+            img.paste(imlogo,(60, 50))
         #img.paste(imlogoaud,(100, 760))
         text=d.entries[0].title
         fontstring="Merriweather-Light"
