@@ -260,7 +260,7 @@ def guardianheadlines(img, config):
         imlogoaud = Image.open(filenameaudrey)
         resize = 300,300
         #imlogoaud.thumbnail(resize)
-        if 'url' in config['headlines']:
+        if 'headlines' in config:
             d = feedparser.parse(config['headlines']['url'])
         else:
             d = feedparser.parse('https://www.theguardian.com/uk/rss')
