@@ -14,7 +14,7 @@ ticker:
   sparklinedays: 14 # Days of data on graph
   coinsperpage: 4
 headlines:
-  feedurl: https://rss.nytimes.com/services/xml/rss/nyt/US.xml
+  feedurl: 'https://rss.nytimes.com/services/xml/rss/nyt/US.xml'
   feedname: "New York Times"
 function: # Extra functionality
   mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes
