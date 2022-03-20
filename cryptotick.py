@@ -266,6 +266,12 @@ def guardianheadlines(img, config):
             logourl = d['feed']['image']['href']
             imgstream = requests.get(logourl, stream=True)
             imlogo = Image.open(io.BytesIO(imgstream.content))
+            # put white background onto logo
+            logowidth = imlogo.size[0]
+            logoheight = imlogo.size[1]
+            new_image = Image.new("RGBA", (logowidth,logoheight), "WHITE")
+            new_image.paste(imlogo, (0, 0), imlogo)
+            imlogo=new_image 
             logging.info('got headline from source')
         else:
             d = feedparser.parse('https://www.theguardian.com/uk/rss')
