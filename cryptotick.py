@@ -279,7 +279,7 @@ def guardianheadlines(img, config):
             imlogo = Image.open(filename)
         resize = 800,150
         imlogo.thumbnail(resize)
-        img.paste(imlogo,(60, 50))
+        img.paste(imlogo,(70, 50))
         #img.paste(imlogoaud,(100, 760))
         text=d.entries[0].title
         fontstring="Merriweather-Light"
