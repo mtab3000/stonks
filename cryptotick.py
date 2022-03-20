@@ -262,6 +262,7 @@ def guardianheadlines(img, config):
         #imlogoaud.thumbnail(resize)
         if 'headlines' in config:
             d = feedparser.parse(config['headlines']['feedurl'])
+            logging.info('got headline from source')
         else:
             d = feedparser.parse('https://www.theguardian.com/uk/rss')
             filename = os.path.join(dirname, 'images/guardianlogo.jpg')
@@ -271,7 +272,6 @@ def guardianheadlines(img, config):
             img.paste(imlogo,(60, 50))
         #img.paste(imlogoaud,(100, 760))
         text=d.entries[0].title
-        print(text)
         fontstring="Merriweather-Light"
         y_text=-230
         height= 120
