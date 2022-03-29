@@ -156,7 +156,7 @@ def redditquotes(img, config):
         imlogo = Image.open(filename)
         resize = 300,300
         imlogo.thumbnail(resize)
-        quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=week&limit=100'
+        quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=month&limit=100'
         quotestack = getallquotes(quoteurl)
     #   Tidy quotes
         i=0
