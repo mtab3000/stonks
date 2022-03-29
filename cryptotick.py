@@ -120,8 +120,10 @@ def jsontoquotestack(jsonquotes,quotestack):
     i=0
     try:
         length= len(jsonquotes['data']['children'])
+        scorethresh=10
         while i < length:
-            quotestack.append(str(jsonquotes['data']['children'][i]['data']['title']))
+            if jsonquotes['data']['children'][i]['data']['score']>scorethresh:
+                quotestack.append(str(jsonquotes['data']['children'][i]['data']['title']))
             i+=1
     except:
         logging.info('Reddit Does Not Like You')
@@ -631,7 +633,6 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
 
     draw_x = (img_width - text_width)//2 + x_offset
     draw_y = (img_height - text_height)//2 + y_offset
-
     draw.text((draw_x, draw_y), text, font=font,fill=(0,0,0) )
 
 def writewrappedlines(img,text,fontsize,y_text=0,height=60, width=15,fontstring="Forum-Regular"):
