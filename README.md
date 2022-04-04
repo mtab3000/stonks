@@ -38,7 +38,7 @@ Get up-to-date with
     sudo apt-get update
     sudo apt-get upgrade
 
-then, enable spi and clone this repository using
+then, enable spi and clone this repository and IT8951 using
 
     sudo raspi-config nonint do_spi 0
     git clone https://github.com/GregDMeyer/IT8951
