@@ -30,6 +30,7 @@ Uses code based on the stuff at [btcticker](http://github.com/llvllch/btcticker)
 # Prerequisites
 
 - A working Pi with waveshare 6inch HD ePaper attached
+- The [IT8951](https://github.com/GregDMeyer/IT8951) library installed
 
 # Installation
 
@@ -38,18 +39,11 @@ Get up-to-date with
     sudo apt-get update
     sudo apt-get upgrade
 
-then, enable spi and clone this repository and IT8951 using
+then, enable spi and clone this repository using
 
     sudo raspi-config nonint do_spi 0
-    git clone https://github.com/GregDMeyer/IT8951
     git clone https://github.com/llvllch/stonks
-
-then copy the IT8951 library so the display works:
-
-    cd stonks
-    cp -r ../IT8951/IT8951/ .
-    rm -rf ../IT8951
-    
+   
 Install the required modules using pip and apt-get:
 
     python -m pip install --upgrade pip  
