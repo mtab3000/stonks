@@ -1,4 +1,5 @@
-
+import pyximport
+pyximport.install()
 from time import sleep
 from random import randrange
 import argparse
