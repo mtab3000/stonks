@@ -44,7 +44,7 @@ then, enable spi and clone this repository and IT8951 using
     git clone https://github.com/GregDMeyer/IT8951
     git clone https://github.com/llvllch/stonks
 
-then:
+then copy the IT8951 library so the display works:
 
     cd stonks
     cp -r ../IT8951 .
