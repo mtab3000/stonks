@@ -58,7 +58,7 @@ Install the required modules using pip:
 Make a copy of the example config file and run the code using:
 
     cp config_example.yaml config.yaml
-    python3 crypotick.py
+    python3 cryptotick.py
     
 # Configuration
 
