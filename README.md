@@ -52,6 +52,7 @@ then:
     
 Install the required modules using pip:
 
+    python -m pip install --upgrade pip  
     python3 -m pip install -r requirements.txt
 
 Make a copy of the example config file and run the code using:
