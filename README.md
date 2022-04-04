@@ -30,7 +30,6 @@ Uses code based on the stuff at [btcticker](http://github.com/llvllch/btcticker)
 # Prerequisites
 
 - A working Pi with waveshare 6inch HD ePaper attached
-- The Python module for [IT8951](https://github.com/GregDMeyer/IT8951) installed
 
 # Installation
 
@@ -42,26 +41,27 @@ Get up-to-date with
 then, enable spi and clone this repository using
 
     sudo raspi-config nonint do_spi 0
+    git clone https://github.com/GregDMeyer/IT8951
     git clone https://github.com/llvllch/stonks
 
 then:
 
     cd stonks
+    cp -r ../IT8951 .
+    rm -rf ../IT8951
     
 Install the required modules using pip:
 
     python3 -m pip install -r requirements.txt
 
+Make a copy of the example config file and run the code using:
 
-Run the code using:
-
+    cp config_example.yaml config.yaml
     python3 crypotick.py
     
-To periodically run the script, set it as a [cronjob](https://opensource.com/article/17/11/how-use-cron-linux) or systemd. Systemd gives better control over restarts etc when the internet isn't playing nicely
-
 # Configuration
 
-Edit the file config.yaml. There are boolean values for activation of modes, as well as a function section that lists the functions that are sampled on for each refresh iteration. There is also a weighting of those samples. 
+Edit the file config.yaml. There are boolean values for activation of modes, as well as a function section that lists the functions that are sampled from on each refresh iteration. There is also a weighting of those samples. 
 
 ```
 function: 
