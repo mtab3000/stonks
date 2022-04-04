@@ -50,7 +50,7 @@ then copy the IT8951 library so the display works:
     cp -r ../IT8951/IT8951/ .
     rm -rf ../IT8951
     
-Install the required modules using pip:
+Install the required modules using pip and apt-get:
 
     python -m pip install --upgrade pip  
     python3 -m pip install -r requirements.txt
