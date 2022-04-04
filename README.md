@@ -47,7 +47,7 @@ then, enable spi and clone this repository and IT8951 using
 then copy the IT8951 library so the display works:
 
     cd stonks
-    cp -r ../IT8951 .
+    cp -r ../IT8951/IT8951/ .
     rm -rf ../IT8951
     
 Install the required modules using pip:
