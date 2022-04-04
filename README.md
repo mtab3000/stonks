@@ -30,7 +30,7 @@ Uses code based on the stuff at [btcticker](http://github.com/llvllch/btcticker)
 # Prerequisites
 
 - A working Pi with waveshare 6inch HD ePaper attached
-- The [IT8951](https://github.com/GregDMeyer/IT8951) library installed
+- [IT8951](https://github.com/GregDMeyer/IT8951) installed
 
 # Installation
 
