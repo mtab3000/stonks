@@ -41,8 +41,10 @@ Get up-to-date with
 
 then, enable spi and clone this repository using
 
+    cd ~
     sudo raspi-config nonint do_spi 0
     git clone https://github.com/llvllch/stonks
+    cd stonks
    
 Install the required modules using pip and apt-get:
 
