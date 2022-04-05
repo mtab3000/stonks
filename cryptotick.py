@@ -54,18 +54,18 @@ def wordaday(img, config):
         d = feedparser.parse('https://wordsmith.org/awad/rss1.xml')
         wad = d.entries[0].title
         fontstring="Forum-Regular"
-        y_text=-200
+        y_text=-300
         height= 110
         width= 27
         fontsize=180
         img, numline=writewrappedlines(img,wad,fontsize,y_text,height, width,fontstring)
-        img.paste(imlogo,(100, 760))
+        img.paste(imlogo,(100, -500))
         wadsummary= d.entries[0].summary
         fontstring="GoudyBookletter1911-Regular"
-        y_text=0
+        y_text= -100
         height= 80
-        width= 40
-        fontsize=70
+        width= 50
+        fontsize=60
         img, numline=writewrappedlines(img,wadsummary,fontsize,y_text,height, width,fontstring)
         success=True
     except Exception as e:
