@@ -117,9 +117,10 @@ def textfilequotes(img, config):
 
 def jsontoquotestack(jsonquotes,quotestack):
     i=0
+    # hardcoded 'quality' parameter, migrate this to config file after testing
     try:
         length= len(jsonquotes['data']['children'])
-        scorethresh=10
+        scorethresh=50
         while i < length:
             if jsonquotes['data']['children'][i]['data']['score']>scorethresh:
                 quotestack.append(str(jsonquotes['data']['children'][i]['data']['title']))
