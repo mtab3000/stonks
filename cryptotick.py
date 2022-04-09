@@ -58,8 +58,9 @@ def wordaday(img, config):
         height= 110
         width= 27
         fontsize=180
+        img.paste(imlogo,(50, 100))
         img, numline=writewrappedlines(img,wad,fontsize,y_text,height, width,fontstring)
-        img.paste(imlogo,(100, 100))
+        
         wadsummary= d.entries[0].summary
         fontstring="GoudyBookletter1911-Regular"
         y_text= -100
