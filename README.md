@@ -48,7 +48,7 @@ then, enable spi and clone this repository using
    
 Install the required modules using pip and apt-get:
 
-    python -m pip install --upgrade pip  
+    python3 -m pip install --upgrade pip  
     python3 -m pip install -r requirements.txt
     sudo apt-get install libatlas-base-dev
 
