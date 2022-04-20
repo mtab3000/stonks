@@ -1,4 +1,3 @@
-
 from time import sleep
 from random import randrange
 import argparse
@@ -18,6 +17,7 @@ import unicodedata
 import re
 import logging
 import os
+import io
 import yaml 
 import time
 import socket
@@ -54,18 +54,19 @@ def wordaday(img, config):
         d = feedparser.parse('https://wordsmith.org/awad/rss1.xml')
         wad = d.entries[0].title
         fontstring="Forum-Regular"
-        y_text=-200
+        y_text=-300
         height= 110
         width= 27
         fontsize=180
+        img.paste(imlogo,(50, 100))
         img, numline=writewrappedlines(img,wad,fontsize,y_text,height, width,fontstring)
-        img.paste(imlogo,(100, 760))
+        
         wadsummary= d.entries[0].summary
         fontstring="GoudyBookletter1911-Regular"
-        y_text=0
+        y_text= -100
         height= 80
-        width= 40
-        fontsize=70
+        width= 50
+        fontsize=60
         img, numline=writewrappedlines(img,wadsummary,fontsize,y_text,height, width,fontstring)
         success=True
     except Exception as e:
@@ -115,34 +116,56 @@ def textfilequotes(img, config):
             success= False
     return img, success
 
+def jsontoquotestack(jsonquotes,quotestack):
+    i=0
+    # hardcoded 'quality' parameter, migrate this to config file after testing
+    try:
+        length= len(jsonquotes['data']['children'])
+        scorethresh=50
+        while i < length:
+            if jsonquotes['data']['children'][i]['data']['score']>scorethresh:
+                quotestack.append(str(jsonquotes['data']['children'][i]['data']['title']))
+            i+=1
+    except:
+        logging.info('Reddit Does Not Like You')
+    return quotestack
+
+def getallquotes(url):
+    # This gets all quotes, not just the first 100
+    quotestack = []
+    rawquotes = requests.get(url,headers={'User-agent': 'Chrome'}).json()
+    quotestack = jsontoquotestack(rawquotes, quotestack)
+    after=str(rawquotes['data']['after'])
+    while after!='None':
+        newquotes = requests.get(url+'&after='+after,headers={'User-agent': 'Chrome'}).json()
+        try:
+            quotestack = jsontoquotestack(newquotes, quotestack)
+            after=str(newquotes['data']['after'])
+        except:
+            after='None'
+        logging.info(after)
+        time.sleep(1)
+    string="We got " + str(len(quotestack)) + " quotes."
+    logging.info(string)
+    return quotestack
+
 def redditquotes(img, config):
     try:
         logging.info("get reddit quotes")
+        numline=-1
         filename = os.path.join(dirname, 'images/rabbitsq.png')
         imlogo = Image.open(filename)
         resize = 300,300
         imlogo.thumbnail(resize)
-        quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=week&limit=100'
-        rawquotes = requests.get(quoteurl,headers={'User-agent': 'Chrome'}).json()
-        quotestack = []
-        i=0
-        try:
-            length= len(rawquotes['data']['children'])
-            while i < length:
-                quotestack.append(str(rawquotes['data']['children'][i]['data']['title']))
-                i+=1
-            for key in rawquotes.keys():
-                logging.info(key)
-        except:
-            logging.info('Reddit Does Not Like You')
-
+        quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=month&limit=100'
+        quotestack = getallquotes(quoteurl)
     #   Tidy quotes
         i=0
         while i<len(quotestack):
             result = unicodedata.normalize('NFKD', quotestack[i]).encode('ascii', 'ignore')
             quotestack[i]=result.decode()
             i+=1
-        quotestack = by_size(quotestack, 170)
+        quotestack = by_size(quotestack, 240)
         
         while True:
             quote=random.choice (quotestack)
@@ -180,12 +203,12 @@ def redditquotes(img, config):
             quote = quote.strip()
 
             if splitquote[-1]!=splitquote[0] and len(splitquote[-1])<=25:
-                img.paste(imlogo,(100, 760))
+                img.paste(imlogo,(50, 760))
                 fontstring = "JosefinSans-Light"
                 y_text= -300
                 height= 110
-                width= 37
-                fontsize=60
+                width= 38
+                fontsize=70
                 img, numline =writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
                 source = splitquote[-1]
                 source = source.strip()
@@ -194,9 +217,12 @@ def redditquotes(img, config):
                 draw = ImageDraw.Draw(img) 
                 draw.line((500,880, 948,880), fill=255, width=3)
     #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
-                _place_text(img,source,0,430,60,"JosefinSans-Light")
+                _place_text(img,source,0,430,70,"JosefinSans-Light")
+            if numline<7 and numline >0:
                 success=True
                 break
+            else:
+                img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
     except Exception as e:
         message="Interlude due to a data pull/print problem (Reddit)"
         pic = beanaproblem(img,message)
@@ -237,30 +263,43 @@ def guardianheadlines(img, config):
         filenameaudrey = os.path.join(dirname, 'images/rabbitsq.png')
         imlogoaud = Image.open(filenameaudrey)
         resize = 300,300
-        imlogoaud.thumbnail(resize)
-
-        d = feedparser.parse('https://www.theguardian.com/uk/rss')
-        filename = os.path.join(dirname, 'images/guardianlogo.jpg')
-        imlogo = Image.open(filename)
+        #imlogoaud.thumbnail(resize)
+        if 'headlines' in config:
+            d = feedparser.parse(config['headlines']['feedurl'])
+            logourl = d['feed']['image']['href']
+            imgstream = requests.get(logourl, stream=True)
+            imlogo = Image.open(io.BytesIO(imgstream.content))
+            # put white background onto logo
+            logowidth = imlogo.size[0]
+            logoheight = imlogo.size[1]
+            imlogo=imlogo.convert('RGBA')
+            new_image = Image.new("RGBA", (logowidth,logoheight), "WHITE")
+            new_image.paste(imlogo, (0, 0), imlogo)
+            imlogo=new_image 
+            logging.info('got headline from source')
+        else:
+            d = feedparser.parse('https://www.theguardian.com/uk/rss')
+            filename = os.path.join(dirname, 'images/guardianlogo.jpg')
+            imlogo = Image.open(filename)
         resize = 800,150
         imlogo.thumbnail(resize)
-        img.paste(imlogo,(100, 100))
-        img.paste(imlogoaud,(100, 760))
+        img.paste(imlogo,(70, 50))
+        #img.paste(imlogoaud,(100, 760))
         text=d.entries[0].title
         fontstring="Merriweather-Light"
-        y_text=-200
-        height= 140
+        y_text=-230
+        height= 120
         width= 27
-        fontsize=90
+        fontsize=70
         img, numlines=writewrappedlines(img,text,fontsize,y_text,height, width,fontstring)
         urlstring=d.entries[0].link
         qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=3,border=1,)
         qr.add_data(urlstring)
         qr.make(fit=True)
         theqr = qr.make_image(fill_color="#FFFFFF", back_color="#000000")
-        MAX_SIZE=(150,150)
+        MAX_SIZE=(130,130)
         theqr.thumbnail(MAX_SIZE)
-        img.paste(theqr, (1200,930))
+        img.paste(theqr, (1200,870))
         success=True
     except Exception as e:
         message="Interlude due to a data pull/print problem (Headlines)"
@@ -342,7 +381,7 @@ def beanaproblem(image,message):
     thealert = Image.open(os.path.join(picdir,'arrow.png'))
 #   Migrating from the rather dramatic issue screen to drawing attention to the last
 #   update time. The persistent display takes care of the rest.
-    image.paste(thealert, (390,123))
+    image.paste(thealert, (10,20))
     logging.info(str("Error message: " + message))
 #   Message as QR code to improve error diagnosis
     return image
@@ -557,7 +596,16 @@ def updateDisplay(image,config,allprices, volumes):
         else:
             text="There is an issue with the news feed"
             image, numline=writewrappedlines(image,text,fontsize,y_text,height, width,fontstring)
-
+        if os.path.isfile('/usr/local/bin/bitcoind'):
+            logging.info('looks like a node')
+            iconnodemode=True
+        else:
+            logging.info('not a node')
+            iconnodemode=False
+        if iconnodemode==True:
+            nodeicon = os.path.join(dirname, 'images/noderunner.png')
+            nodelogo = Image.open(nodeicon)
+            image.paste(nodelogo, (130,800))
     return image
 
 
@@ -586,7 +634,6 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
 
     draw_x = (img_width - text_width)//2 + x_offset
     draw_y = (img_height - text_height)//2 + y_offset
-
     draw.text((draw_x, draw_y), text, font=font,fill=(0,0,0) )
 
 def writewrappedlines(img,text,fontsize,y_text=0,height=60, width=15,fontstring="Forum-Regular"):
@@ -838,7 +885,7 @@ def main():
                 imgnew, success = eval(thefunction+"(imgnew,config)")
                 if success==True:
                     img=imgnew
-                display_image_8bpp(display,img, config)
+                    display_image_8bpp(display,img, config)
                 lastrefresh=time.time()
                 if success ==True:
                     diff = (lastrefresh - starttime)
