@@ -47,7 +47,7 @@ Uses code based on the stuff at [btcticker](http://github.com/llvllch/btcticker)
 
 # Installation
 
-Get up-to-date with
+Get your RaspiOS up-to-date using
     
     sudo apt-get update
     sudo apt-get upgrade
