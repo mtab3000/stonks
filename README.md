@@ -2,7 +2,7 @@
 
 # Big Audrey: Quiet internet content on HD epaper.
 
-Big Audrey pulls the stuff that you've told it you're intersted in, then displays it in pleasingly crispy fonts an HD epaper. The script currently randomly chooses from 5 options:
+Big Audrey pulls the stuff that you've told it you're intersted in from the internet, then displays it in pleasingly crispy fonts on a 6 inch HD epaper screen. The script currently randomly chooses from 5 options:
 
 - Quote (from [r/quotes](https://reddit.com/r/quotes))
 - Word of the Day (from [wordsmith.org](https://wordsmith.org))
