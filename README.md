@@ -30,7 +30,7 @@ A word and definition for you to try to shoehorn into conversations, making you 
 
 ### Headline
 
-A headline from a RSS feed from a news source specified in the `config.yaml` file.
+A headline from an RSS feed from a news source specified in the `config.yaml` file.
 
 ### Cartoon
 
