@@ -52,7 +52,7 @@ Get your RaspiOS up-to-date using
     sudo apt-get update
     sudo apt-get upgrade
 
-then, enable spi and clone this repository using
+then, enable the SPI interface and clone this repository using
 
     cd ~
     sudo raspi-config nonint do_spi 0
