@@ -59,7 +59,7 @@ then, enable the SPI interface and clone this repository using
     git clone https://github.com/llvllch/stonks
     cd stonks
    
-Install the required modules using pip and apt-get:
+Install the modules needed to run this code, using pip and apt-get:
 
     python3 -m pip install --upgrade pip  
     python3 -m pip install -r requirements.txt
