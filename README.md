@@ -6,7 +6,7 @@ Big Audrey pulls the stuff that you've told it you're intersted in from the inte
 
 - Quote (from [r/quotes](https://reddit.com/r/quotes))
 - Word of the Day (from [wordsmith.org](https://wordsmith.org))
-- Headline (From The Guardian) (With QR code link to the article)
+- Headline (From an rss feed) (With QR code link to the article)
 - Cartoon (From The New Yorker)
 - Cryptocurrency Dashboard
 
