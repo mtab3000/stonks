@@ -38,7 +38,7 @@ A cartoon from The New Yorker RSS feed.
 
 ### Cryptocurrency Dashboard
 
-Uses code based on the stuff at [btcticker](http://github.com/llvllch/btcticker). The extra screen size means that three (or four) coins can fit on the screen at once. There is also a maximal mode that will show one coin and an item from and RSS news feed, and a QR code link to that article.
+Uses code based on the code we made at [btcticker](http://github.com/llvllch/btcticker). The extra screen size means that three (or four) coins can fit on the screen at once. There is also a maximal mode that will show one coin and an item from and RSS news feed, and a QR code link to that article.
 
 # Prerequisites
 
