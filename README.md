@@ -75,9 +75,9 @@ Make a copy of the example config file and run the code using:
 Edit the file config.yaml. Entries are commented to indicate their function. There are boolean values for activation of modes, as well as a function section that lists the functions that are sampled from on each refresh iteration. There is also a weighting of those samples. 
 
 ```
-function: 
-  mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines
-  weight: 40, 1, 0, 0,1  
+function: # Extra functionality
+  mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes
+  weight: 1, 10, 1, 1, 1, 0 # Weighting for each of the above respectively
 ```
 Means that on each iteration there is a 40/1/1 weighting that the code will choose the functions crypto, redditquotes and guardianheadlines respectively.
 
