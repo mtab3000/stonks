@@ -5,7 +5,7 @@
 Big Audrey pulls the stuff that you've told it you're intersted in from the internet, then displays it in pleasingly crispy fonts on a 6 inch HD epaper screen. The script currently randomly chooses from 5 functions:
 
 - Quote (from [r/quotes](https://reddit.com/r/quotes))
-- Word of the Day (from [wordsmith.org](https://wordsmith.org))
+- Word of the day (from [wordsmith.org](https://wordsmith.org))
 - Headline (From an rss feed) (With QR code link to the article)
 - Cartoon (From The New Yorker)
 - Cryptocurrency Dashboard
@@ -23,6 +23,18 @@ The reason for using r/quotes rather than a curated database, is that the karma 
 The quality of the results depends on the adherence to convention in posts to [r/quotes](https://reddit.com/r/quotes) and the quality of the regex in the script. Currently the script is rarely producing garbled quotes, so it's ready for sharing. 
 
 As well as producing quotes, the script occasionally places other content on the epaper - to keep things interesting.
+
+### Word of the day
+
+A word and definition for you to try to shoehorn into conversations, making you look like a boffin.
+
+### Headline
+
+An RSS feed from a news source specified in the config file.
+
+### Cartoon
+
+A cartoon from The New Yorker
 
 ### Cryptocurrency Dashboard
 
