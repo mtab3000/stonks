@@ -72,7 +72,7 @@ Make a copy of the example config file and run the code using:
     
 # Configuration
 
-Edit the file config.yaml. There are boolean values for activation of modes, as well as a function section that lists the functions that are sampled from on each refresh iteration. There is also a weighting of those samples. 
+Edit the file config.yaml. Entries are commented to indicate their function. There are boolean values for activation of modes, as well as a function section that lists the functions that are sampled from on each refresh iteration. There is also a weighting of those samples. 
 
 ```
 function: 
