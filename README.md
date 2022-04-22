@@ -2,7 +2,7 @@
 
 # Big Audrey: Quiet internet content on HD epaper.
 
-Big Audrey pulls the stuff that you've told it you're intersted in from the internet, then displays it in pleasingly crispy fonts on a 6 inch HD epaper screen. The script currently randomly chooses from 5 options:
+Big Audrey pulls the stuff that you've told it you're intersted in from the internet, then displays it in pleasingly crispy fonts on a 6 inch HD epaper screen. The script currently randomly chooses from 5 functions:
 
 - Quote (from [r/quotes](https://reddit.com/r/quotes))
 - Word of the Day (from [wordsmith.org](https://wordsmith.org))
@@ -10,7 +10,9 @@ Big Audrey pulls the stuff that you've told it you're intersted in from the inte
 - Cartoon (From The New Yorker)
 - Cryptocurrency Dashboard
 
-## Quotes
+## Functions
+
+### Quotes
 
 This is a script that parses content from [r/quotes](https://reddit.com/r/quotes) and tidies it up a little to make an ever-changing Quote poster, using content from the hive-mind that is the internet.
 
@@ -22,7 +24,7 @@ The quality of the results depends on the adherence to convention in posts to [r
 
 As well as producing quotes, the script occasionally places other content on the epaper - to keep things interesting.
 
-## Cryptocurrency Dashboard
+### Cryptocurrency Dashboard
 
 Uses code based on the stuff at [btcticker](http://github.com/llvllch/btcticker). The extra screen size means that three (or four) coins can fit on the screen at once. There is also a maximal mode that will show one coin and an item from and RSS news feed, and a QR code link to that article.
 
