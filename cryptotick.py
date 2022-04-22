@@ -244,7 +244,7 @@ def newyorkercartoon(img, config):
         xvalue= int(1448/2-imwidth/2)
         img.paste(imframe,(xvalue, 75))
         fontstring="Forum-Regular"
-        y_text= 390
+        y_text= 370
         height= 50
         width= 50
         fontsize=60
