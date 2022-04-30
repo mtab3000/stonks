@@ -7,7 +7,7 @@ display:
   xshift: 0 # Pixels to shift image for fine tuning alignment
   yshift: 30 # Pixels to shift image for fine tuning alignment
 ticker:
-  currency: bitcoin, ethereum, cardano, binancecoin
+  currency: bitcoin, ethereum, polkadot, solana
   exchange: default # if you want price from a specific exchange specify here
   fiatcurrency: usd
   updatefrequency: 60 # Seconds (60 is the lower limit, to preserve epd)
