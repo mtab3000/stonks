@@ -423,6 +423,13 @@ def getgecko(url):
         geckojson={}
     return geckojson, connectfail
 
+def configtocoinandfiat(config):
+    crypto_list = currencystringtolist(config['ticker']['currency'])
+    fiat_list=currencystringtolist(config['ticker']['fiatcurrency'])
+    currency=crypto_list[0]
+    fiat=fiat_list[0]
+    return currency, fiat
+
 def getData(config):
     """
     The function to grab the data 
