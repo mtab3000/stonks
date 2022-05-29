@@ -387,79 +387,6 @@ def beanaproblem(image,message):
     return image
 
 
-def getData(config):
-    """
-    The function to grab the data
-    """ 
-    sleep_time = 10
-    num_retries = 5
-    crypto_list = currencystringtolist(config['ticker']['currency'])
-    fiat_list=currencystringtolist(config['ticker']['fiatcurrency'])
-    ua = UserAgent()
-    header = {'User-Agent':str(ua.chrome)}
-
-    logging.info("Getting Data")
-    days_ago=int(config['ticker']['sparklinedays'])   
-    endtime = int(time.time())
-    starttime = endtime - 60*60*24*days_ago
-    starttimeseconds = starttime
-    endtimeseconds = endtime
-    allprices = {}
-    volumes = {}
-    connectbool=False
-    for x in range(0, num_retries):  
-        # Get the price
-        for i in range(len(crypto_list)):
-            logging.info("i="+str(i))
-            fiat=fiat_list[i]
-            whichcoin=crypto_list[i]
-            logging.info(whichcoin)
-            geckourl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency="+fiat+"&ids="+whichcoin
-            try:
-                rawlivecoin = requests.get(geckourl,headers=header).json()
-            except requests.exceptions.RequestException as e:
-                logging.info("Issue with CoinGecko")
-                connectbool=True
-                break
-            liveprice = rawlivecoin[0]
-            pricenow= float(liveprice['current_price'])
-            volumenow = float(liveprice['total_volume'])
-            logging.info("Got Live Data From CoinGecko")
-            geckourlhistorical = "https://api.coingecko.com/api/v3/coins/"+whichcoin+"/market_chart/range?vs_currency="+fiat+"&from="+str(starttimeseconds)+"&to="+str(endtimeseconds)
-            time.sleep(3) # a little polite pause to avoid upsetting coingecko
-            try:
-                rawtimeseries = requests.get(geckourlhistorical,headers=header).json()
-                successstring="Got price for the last "+str(days_ago)+" days from CoinGecko"
-                logging.info(successstring)
-            except requests.exceptions.RequestException as e:
-                logging.info("Issue with CoinGecko")
-                connectbool=True
-                break
-            timeseriesarray = rawtimeseries['prices']
-            timeseriesstack = []
-            length=len (timeseriesarray)
-            i=0
-            while i < length:
-                timeseriesstack.append(float (timeseriesarray[i][1]))
-                i+=1
-            timeseriesstack.append(pricenow)
-            allprices[str(whichcoin+fiat)] = timeseriesstack
-            logging.info(str("Crypto fiat combo: "+whichcoin+fiat))
-            volstring=str(str(whichcoin+fiat)+"volume")
-            volumes[volstring]=volumenow
-            time.sleep(3)
-
-        if connectbool==True:
-            message="Trying again in ", sleep_time, " seconds"
-            logging.info(message)
-            time.sleep(sleep_time)  # wait before trying to fetch the data again
-            sleep_time *= 2  # Implement your backoff algorithm here i.e. exponential backoff
-        else:
-            connectbool=False
-            break
-    if connectbool==True:
-        raise ValueError ('Goingecko did not return data five times in a row')
-    return allprices, volumes
 
 def makeSpark(allprices):
     # Draw and save the sparkline that represents historical data
@@ -486,6 +413,106 @@ def makeSpark(allprices):
         plt.close('all') # Close plot to prevent memory error
     return
 
+def getgecko(url):
+    try:
+        geckojson=requests.get(url, headers=headers).json()
+        connectfail=False
+    except requests.exceptions.RequestException as e:
+        logging.error("Issue with CoinGecko")
+        connectfail=True
+        geckojson={}
+    return geckojson, connectfail
+
+def getData(config):
+    """
+    The function to grab the data 
+    """
+    sleep_time = 10
+    num_retries = 5
+    whichcoin,fiat=configtocoinandfiat(config)
+    logging.info("Getting Data")
+    days_ago=int(config['ticker']['sparklinedays'])
+    endtime = int(time.time())
+    starttime = endtime - 60*60*24*days_ago
+    starttimeseconds = starttime
+    endtimeseconds = endtime
+    geckourlhistorical = "https://api.coingecko.com/api/v3/coins/"+whichcoin+"/market_chart/range?vs_currency="+fiat+"&from="+str(starttimeseconds)+"&to="+str(endtimeseconds)
+    logging.debug(geckourlhistorical)
+    timeseriesstack = []
+    for x in range(0, num_retries):
+        rawtimeseries, connectfail=  getgecko(geckourlhistorical)
+        if connectfail== True:
+            pass
+        else:
+            logging.debug("Got price for the last "+str(days_ago)+" days from CoinGecko")
+            timeseriesarray = rawtimeseries['prices']
+            length=len (timeseriesarray)
+            i=0
+            while i < length:
+                timeseriesstack.append(float (timeseriesarray[i][1]))
+                i+=1
+            # A little pause before hiting the api again
+            time.sleep(1)
+            # Get the price
+        if config['ticker']['exchange']=='default':
+            geckourl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency="+fiat+"&ids="+whichcoin
+            logging.debug(geckourl)
+            rawlivecoin , connectfail = getgecko(geckourl)
+            if connectfail==True:
+                pass
+            else:
+                logging.debug(rawlivecoin[0])
+                liveprice = rawlivecoin[0]
+                pricenow= float(liveprice['current_price'])
+                volume = float(liveprice['total_volume'])
+                timeseriesstack.append(pricenow)
+        else:
+            geckourl= "https://api.coingecko.com/api/v3/exchanges/"+config['ticker']['exchange']+"/tickers?coin_ids="+whichcoin+"&include_exchange_logo=false"
+            logging.debug(geckourl)
+            rawlivecoin, connectfail = getgecko(geckourl)
+            if connectfail==True:
+                pass
+            else:
+                theindex=-1
+                upperfiat=fiat.upper()
+                for i in range (len(rawlivecoin['tickers'])):
+                    target=rawlivecoin['tickers'][i]['target']
+                    if target==upperfiat:
+                        theindex=i
+                        logging.debug("Found "+upperfiat+" at index " + str(i))
+        #       if UPPERFIAT is not listed as a target theindex==-1 and it is time to go to sleep
+                if  theindex==-1:
+                    logging.error("The exchange is not listing in "+upperfiat+". Misconfigured - shutting down script")
+                    sys.exit()
+                liveprice= rawlivecoin['tickers'][theindex]
+                pricenow= float(liveprice['last'])
+                volume = float(liveprice['converted_volume']['usd'])
+                logging.debug("Got Live Data From CoinGecko")
+                timeseriesstack.append(pricenow)
+                if pricenow>alltimehigh:
+                    other['ATH']=True
+                else:
+                    other['ATH']=False
+        if connectfail==True:
+            message="Trying again in ", sleep_time, " seconds"
+            logging.warn(message)
+            time.sleep(sleep_time)  # wait before trying to fetch the data again
+            sleep_time *= 2  # exponential backoff
+        else:
+            break
+    return timeseriesstack, volume
+
+def makeSpark(allprices):
+    # Draw and save the sparkline that represents historical data
+
+    # Subtract the mean from the sparkline to make the mean appear on the plot (it's really the x axis)    
+    logging.info("Update Sparkline graphs")    
+    for key in allprices.keys():   
+        logging.info(key)    
+        x = allprices[key]-np.mean(allprices[key])        # Transform the prices (subtract mean)
+
+        fig, ax = plt.subplots(1,1,figsize=(10,3))        # Choose the aspect ratio of each individual plot
+        plt.plot(x, color='k', linewidth=3)               # 
 
 def updateDisplay(image,config,allprices, volumes):
     """   
