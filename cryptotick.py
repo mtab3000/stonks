@@ -576,7 +576,10 @@ def updateDisplay(image,config,allprices, volumes):
             pricefontsize=130
         _place_text(image, text, x_offset=-175, y_offset=height-420,fontsize=pricefontsize,fontstring="Roboto-Light")
         vol = human_format(volumes[key+"volume"])
-        text=pricechange + " vol:" + symbolstring + vol
+        if config['ticker']['exchange']=='default':
+            text=pricechange + " vol:" + symbolstring + vol
+        else:
+            text=pricechange + " vol:" + vol
         _place_text(image, text, x_offset=-175, y_offset=height-310,fontsize=50,fontstring="Roboto-Light")
         if 'coinnames' in config['display'] and config['display']['coinnames']:
             _place_text(image, whichcoin, x_offset=-175, y_offset=height-500,fontsize=50,fontstring="Roboto-Light")
