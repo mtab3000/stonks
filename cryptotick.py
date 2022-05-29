@@ -32,6 +32,8 @@ dirname = os.path.dirname(__file__)
 configfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'config.yaml')
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images')
 quotesfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'data/quotes.tsv')
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+button_pressed = 0
 
 def mempool(img, config):
     feesurl='https://mempool.space/api/v1/fees/recommended'
