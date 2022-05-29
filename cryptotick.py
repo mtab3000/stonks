@@ -426,12 +426,28 @@ def getData(config):
             logging.info(whichcoin)
             if config['ticker']['exchange']=='default':
                 geckourl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency="+fiat+"&ids="+whichcoin
+                rawlivecoin, connectfail = getgecko(geckourl)
+                liveprice = rawlivecoin[0]
+                pricenow= float(liveprice['current_price'])
+                volumenow = float(liveprice['total_volume'])
             else: 
                 geckourl= "https://api.coingecko.com/api/v3/exchanges/"+config['ticker']['exchange']+"/tickers?coin_ids="+whichcoin+"&include_exchange_logo=false"
-            rawlivecoin, connectfail = getgecko(geckourl)
-            liveprice = rawlivecoin[0]
-            pricenow= float(liveprice['current_price'])
-            volumenow = float(liveprice['total_volume'])
+                rawlivecoin, connectfail = getgecko(geckourl)
+                theindex=-1
+                upperfiat=fiat.upper()
+                for i in range (len(rawlivecoin['tickers'])):
+                    target=rawlivecoin['tickers'][i]['target']
+                    if target==upperfiat:
+                        theindex=i
+                        logging.debug("Found "+upperfiat+" at index " + str(i))
+        #       if UPPERFIAT is not listed as a target theindex==-1 and it is time to go to sleep
+                if  theindex==-1:
+                    logging.error("The exchange is not listing in "+upperfiat+". Misconfigured - shutting down script")
+                    sys.exit()
+                liveprice= rawlivecoin['tickers'][theindex]
+                pricenow= float(liveprice['last'])
+                volumenow = float(liveprice['volume'])
+
             logging.info("Got Live Data From CoinGecko")
             geckourlhistorical = "https://api.coingecko.com/api/v3/coins/"+whichcoin+"/market_chart/range?vs_currency="+fiat+"&from="+str(starttimeseconds)+"&to="+str(endtimeseconds)
             time.sleep(3) # a little polite pause to avoid upsetting coingecko
