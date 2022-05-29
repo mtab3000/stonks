@@ -473,7 +473,7 @@ def getData(config):
                 logging.debug(rawlivecoin[0])
                 liveprice = rawlivecoin[0]
                 pricenow= float(liveprice['current_price'])
-                volume = float(liveprice['total_volume'])
+                volume ['volume']= float(liveprice['total_volume'])
                 timeseriesstack.append(pricenow)
         else:
             geckourl= "https://api.coingecko.com/api/v3/exchanges/"+config['ticker']['exchange']+"/tickers?coin_ids="+whichcoin+"&include_exchange_logo=false"
@@ -495,7 +495,7 @@ def getData(config):
                     sys.exit()
                 liveprice= rawlivecoin['tickers'][theindex]
                 pricenow= float(liveprice['last'])
-                volume = float(liveprice['converted_volume']['usd'])
+                volume ['volume']= float(liveprice['converted_volume']['usd'])
                 logging.debug("Got Live Data From CoinGecko")
                 timeseriesstack.append(pricenow)
                 if pricenow>alltimehigh:
