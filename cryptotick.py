@@ -436,7 +436,7 @@ def getData(config):
     """
     The function to grab the data 
     """
-    volume= []
+    other= list()          
     sleep_time = 10
     num_retries = 5
     whichcoin,fiat=configtocoinandfiat(config)
@@ -474,7 +474,7 @@ def getData(config):
                 logging.debug(rawlivecoin[0])
                 liveprice = rawlivecoin[0]
                 pricenow= float(liveprice['current_price'])
-                volume ['volume']= float(liveprice['total_volume'])
+                other['volume']= float(liveprice['total_volume'])
                 timeseriesstack.append(pricenow)
         else:
             geckourl= "https://api.coingecko.com/api/v3/exchanges/"+config['ticker']['exchange']+"/tickers?coin_ids="+whichcoin+"&include_exchange_logo=false"
@@ -496,7 +496,7 @@ def getData(config):
                     sys.exit()
                 liveprice= rawlivecoin['tickers'][theindex]
                 pricenow= float(liveprice['last'])
-                volume ['volume']= float(liveprice['converted_volume']['usd'])
+                other['volume']= float(liveprice['converted_volume']['usd'])
                 logging.debug("Got Live Data From CoinGecko")
                 timeseriesstack.append(pricenow)
                 if pricenow>alltimehigh:
@@ -510,7 +510,7 @@ def getData(config):
             sleep_time *= 2  # exponential backoff
         else:
             break
-    return timeseriesstack, volume
+    return timeseriesstack, other
 
 def makeSpark(allprices):
     # Draw and save the sparkline that represents historical data
