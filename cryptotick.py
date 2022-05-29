@@ -436,7 +436,7 @@ def getData(config):
     """
     The function to grab the data 
     """
-    other= dict()       
+    other= {}        
     sleep_time = 10
     num_retries = 5
     whichcoin,fiat=configtocoinandfiat(config)
@@ -499,10 +499,6 @@ def getData(config):
                 other['volume']= float(liveprice['converted_volume']['usd'])
                 logging.debug("Got Live Data From CoinGecko")
                 timeseriesstack.append(pricenow)
-                if pricenow>alltimehigh:
-                    other['ATH']=True
-                else:
-                    other['ATH']=False
         if connectfail==True:
             message="Trying again in ", sleep_time, " seconds"
             logging.warn(message)
