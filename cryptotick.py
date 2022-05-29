@@ -436,7 +436,7 @@ def getData(config):
     """
     The function to grab the data 
     """
-    other= {}        
+    other= dict()       
     sleep_time = 10
     num_retries = 5
     whichcoin,fiat=configtocoinandfiat(config)
