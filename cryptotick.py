@@ -386,6 +386,15 @@ def beanaproblem(image,message):
 #   Message as QR code to improve error diagnosis
     return image
 
+def getgecko(url):
+    try:
+        geckojson=requests.get(url, headers=headers).json()
+        connectfail=False
+    except requests.exceptions.RequestException as e:
+        logging.error("Issue with CoinGecko")
+        connectfail=True
+        geckojson={}
+    return geckojson, connectfail
 
 def getData(config):
     """
@@ -414,27 +423,19 @@ def getData(config):
             fiat=fiat_list[i]
             whichcoin=crypto_list[i]
             logging.info(whichcoin)
-            geckourl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency="+fiat+"&ids="+whichcoin
-            try:
-                rawlivecoin = requests.get(geckourl,headers=header).json()
-            except requests.exceptions.RequestException as e:
-                logging.info("Issue with CoinGecko")
-                connectbool=True
-                break
+            if config['ticker']['exchange']=='default':
+                geckourl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency="+fiat+"&ids="+whichcoin
+            else: 
+                geckourl= "https://api.coingecko.com/api/v3/exchanges/"+config['ticker']['exchange']+"/tickers?coin_ids="+whichcoin+"&include_exchange_logo=false"
+            rawlivecoin, connectfail = getgecko(geckourl)
             liveprice = rawlivecoin[0]
             pricenow= float(liveprice['current_price'])
             volumenow = float(liveprice['total_volume'])
             logging.info("Got Live Data From CoinGecko")
             geckourlhistorical = "https://api.coingecko.com/api/v3/coins/"+whichcoin+"/market_chart/range?vs_currency="+fiat+"&from="+str(starttimeseconds)+"&to="+str(endtimeseconds)
             time.sleep(3) # a little polite pause to avoid upsetting coingecko
-            try:
-                rawtimeseries = requests.get(geckourlhistorical,headers=header).json()
-                successstring="Got price for the last "+str(days_ago)+" days from CoinGecko"
-                logging.info(successstring)
-            except requests.exceptions.RequestException as e:
-                logging.info("Issue with CoinGecko")
-                connectbool=True
-                break
+           
+            rawtimeseries, connectfail = getgecko(geckourlhistorical)
             timeseriesarray = rawtimeseries['prices']
             timeseriesstack = []
             length=len (timeseriesarray)
@@ -449,7 +450,7 @@ def getData(config):
             volumes[volstring]=volumenow
             time.sleep(3)
 
-        if connectbool==True:
+        if connectfail==True:
             message="Trying again in ", sleep_time, " seconds"
             logging.info(message)
             time.sleep(sleep_time)  # wait before trying to fetch the data again
