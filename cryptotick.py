@@ -799,6 +799,7 @@ def display_startup(display):
 
 
 def main():
+    img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
 #   If we log to a file, we will need to set up log rotation, so for now it goes to /var/log/syslog
     logging.basicConfig(level=logging.DEBUG)
     args = parse_args()
