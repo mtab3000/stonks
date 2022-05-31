@@ -4,6 +4,7 @@ import argparse
 import PIL
 from PIL import Image, ImageDraw, ImageFont,  ImageOps
 from sys import path
+import sys
 from IT8951 import constants
 import matplotlib 
 matplotlib.use('Agg')
