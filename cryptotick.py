@@ -515,7 +515,8 @@ def updateDisplay(image,config,allprices, volumes):
     fiat_list=currencystringtolist(config['ticker']['fiatcurrency'])
 
     days_ago=int(config['ticker']['sparklinedays'])   
-    scaling=3/(config['ticker']['coinsperpage'])
+    # scaling=3/(config['ticker']['coinsperpage'])
+    scaling=3/len(crypto_list)
     height=int(150*scaling)
     heightincrement=int(295*scaling)
     index=0
