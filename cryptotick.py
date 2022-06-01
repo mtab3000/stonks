@@ -516,7 +516,7 @@ def updateDisplay(image,config,allprices, volumes):
     fiat_list=currencystringtolist(config['ticker']['fiatcurrency'])
     if 'bold' in config['display'] and config['display']['bold']:
         fontprice= "JosefinSans-Regular"
-        fontvolume= "Roboto-Regular"
+        fontvolume= "Roboto-Bold"
     else:
         fontprice= "JosefinSans-Medium"
         fontvolume= "Roboto-Light"
