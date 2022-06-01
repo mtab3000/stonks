@@ -515,10 +515,10 @@ def updateDisplay(image,config,allprices, volumes):
     crypto_list = currencystringtolist(config['ticker']['currency'])
     fiat_list=currencystringtolist(config['ticker']['fiatcurrency'])
     if 'bold' in config['display'] and config['display']['bold']:
-        fontprice= "JosefinSans-Regular"
+        fontprice= "JosefinSans-Medium"
         fontvolume= "Roboto-Bold"
     else:
-        fontprice= "JosefinSans-Medium"
+        fontprice= "JosefinSans-Regular"
         fontvolume= "Roboto-Light"
     days_ago=int(config['ticker']['sparklinedays'])   
     # scaling=3/(config['ticker']['coinsperpage'])
