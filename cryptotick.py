@@ -518,7 +518,7 @@ def updateDisplay(image,config,allprices, volumes):
         fontprice= "JosefinSans-Medium"
         fontvolume= "Roboto-Bold"
     else:
-        fontprice= "JosefinSans-Regular"
+        fontprice= "JosefinSans-Light"
         fontvolume= "Roboto-Light"
     days_ago=int(config['ticker']['sparklinedays'])   
     # scaling=3/(config['ticker']['coinsperpage'])
