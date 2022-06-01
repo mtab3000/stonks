@@ -581,6 +581,7 @@ def updateDisplay(image,config,allprices, volumes):
             pricefontsize=120
         else:
             pricefontsize=130
+        volfontsize=50
         _place_text(image, text, x_offset=-175, y_offset=height-420,fontsize=pricefontsize,fontstring=fontprice)
         vol = human_format(volumes[key+"volume"])
         if config['ticker']['exchange']=='default':
@@ -588,9 +589,9 @@ def updateDisplay(image,config,allprices, volumes):
         else:
             text=pricechange + " vol:" + vol # Currency string omitted as gdax provides volume in coin number
             
-        _place_text(image, text, x_offset=-175, y_offset=height-310,fontsize=50,fontstring=fontvolume)
+        _place_text(image, text, x_offset=-175, y_offset=height-310,fontsize=volfontsize,fontstring=fontvolume)
         if 'coinnames' in config['display'] and config['display']['coinnames']:
-            _place_text(image, whichcoin, x_offset=-175, y_offset=height-500,fontsize=50,fontstring=fontvolume)
+            _place_text(image, whichcoin, x_offset=-175, y_offset=height-500,fontsize=volfontsize,fontstring=fontvolume)
             logging.info("names")
         height += heightincrement
         index += 1
