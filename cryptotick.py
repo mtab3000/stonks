@@ -514,7 +514,12 @@ def updateDisplay(image,config,allprices, volumes):
     """
     crypto_list = currencystringtolist(config['ticker']['currency'])
     fiat_list=currencystringtolist(config['ticker']['fiatcurrency'])
-
+    if 'bold' in config['display'] and config['display']['bold']:
+        fontprice= "JosefinSans-Regular"
+        fontvolume= "Roboto-Medium"
+    else:
+        fontprice= "JosefinSans-Medium"
+        fontvolume= "Roboto-Light"
     days_ago=int(config['ticker']['sparklinedays'])   
     # scaling=3/(config['ticker']['coinsperpage'])
     scaling=3/len(crypto_list)
@@ -576,16 +581,16 @@ def updateDisplay(image,config,allprices, volumes):
             pricefontsize=120
         else:
             pricefontsize=130
-        _place_text(image, text, x_offset=-175, y_offset=height-420,fontsize=pricefontsize,fontstring="Roboto-Light")
+        _place_text(image, text, x_offset=-175, y_offset=height-420,fontsize=pricefontsize,fontstring=fontprice)
         vol = human_format(volumes[key+"volume"])
         if config['ticker']['exchange']=='default':
             text=pricechange + " vol:" + symbolstring + vol
         else:
             text=pricechange + " vol:" + vol # Currency string omitted as gdax provides volume in coin number
             
-        _place_text(image, text, x_offset=-175, y_offset=height-310,fontsize=50,fontstring="Roboto-Light")
+        _place_text(image, text, x_offset=-175, y_offset=height-310,fontsize=50,fontstring=fontvolume)
         if 'coinnames' in config['display'] and config['display']['coinnames']:
-            _place_text(image, whichcoin, x_offset=-175, y_offset=height-500,fontsize=50,fontstring="Roboto-Light")
+            _place_text(image, whichcoin, x_offset=-175, y_offset=height-500,fontsize=50,fontstring=fontvolume)
             logging.info("names")
         height += heightincrement
         index += 1
@@ -800,7 +805,7 @@ def display_startup(display):
 
 
 def main():
-    img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
+    img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) ) #initialise image
 #   If we log to a file, we will need to set up log rotation, so for now it goes to /var/log/syslog
     logging.basicConfig(level=logging.DEBUG)
     args = parse_args()
