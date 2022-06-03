@@ -321,7 +321,7 @@ def crypto(img, config):
         allprices, volumes=getData(config)
         # generate sparkline
         logging.info("SPARKLINES")
-        makeSpark(allprices)
+        makeSpark(allprices,config['display']['maximalist'])
         logging.info("NOW DISPLAY")
         # update display
         pic=updateDisplay(img,config, allprices, volumes)
@@ -480,7 +480,7 @@ def getData(config):
         raise ValueError ('Goingecko did not return data five times in a row')
     return allprices, volumes
 
-def makeSpark(allprices):
+def makeSpark(allprices,maximalbool):
     # Draw and save the sparkline that represents historical data
 
     # Subtract the mean from the sparkline to make the mean appear on the plot (it's really the x axis)    
@@ -489,9 +489,12 @@ def makeSpark(allprices):
         logging.info(key)    
         x = allprices[key]-np.mean(allprices[key])        # Transform the prices (subtract mean)
 
-        fig, ax = plt.subplots(1,1,figsize=(10,3))        # Choose the aspect ratio of each individual plot
+        fig, ax = plt.subplots(1,1,figsize=(10,3.3))        # Choose the aspect ratio of each individual plot
         plt.plot(x, color='k', linewidth=3)               # Draw the transformed sparkline
-
+        maxvalue= max(x)
+        maxindex= int(np.argmax(x,axis=0))
+        minvalue= min(x)
+        minindex= int(np.argmin(x,axis=0))
 
         # Remove the Y axis
         for k,v in ax.spines.items():                     # No Y axis, and x will show as mean because of transformation
@@ -500,7 +503,12 @@ def makeSpark(allprices):
         ax.set_yticks([])                                 # No ticks
         ax.axhline(c='k', linewidth=2, linestyle=(0, (5, 2, 1, 2)))
 
+        if maximalbool:
+            plt.plot(maxvalue,  marker="v",c="gray",markersize=25)
+            plt.plot(minvalue,  marker="^",c="gray",markersize=25)
+
         # Save the resulting bmp file to the images directory
+
         plt.savefig(os.path.join(picdir, key+'spark.png'), dpi=72)
         plt.close('all') # Close plot to prevent memory error
     return
@@ -567,14 +575,24 @@ def updateDisplay(image,config,allprices, volumes):
         tokenimage.thumbnail(newsize,Image.ANTIALIAS)
         pricechange = str("%+d" % round((allprices[key][-1]-allprices[key][0])/allprices[key][-1]*100,2))+"%"
         d = decimal.Decimal(str(pricenow)).as_tuple().exponent
+        pricehigh=max(allprices[key])
+        pricelow=min(allprices[key])
         if pricenow > 1000:
             pricenowstring =str(format(int(pricenow),","))
+            pricehighstring = str(format(int(pricehigh),","))
+            pricelowstring = str(format(int(pricelow),","))
         elif pricenow < 1000 and d == -1:
             pricenowstring ="{:.2f}".format(pricenow)
+            pricehighstring ="{:.2f}".format(pricehigh)
+            pricelowstring ="{:.2f}".format(pricelow)
         elif pricenow<0.1:
             pricenowstring ="{:.3g}".format(pricenow)
+            pricehighstring ="{:.3g}".format(pricehigh)
+            pricelowstring ="{:.3g}".format(pricelow)
         else:
             pricenowstring ="{:.5g}".format(pricenow)
+            pricehighstring ="{:.5g}".format(pricehigh)
+            pricelowstring ="{:.5g}".format(pricelow)
         draw = ImageDraw.Draw(image)   
         image.paste(sparkpng, (705,height+40))
         image.paste(tokenimage, (85,height+30))
@@ -593,6 +611,9 @@ def updateDisplay(image,config,allprices, volumes):
             text=pricechange + " vol:" + vol # Currency string omitted as gdax provides volume in coin number
             
         _place_text(image, text, x_offset=-175, y_offset=height-310,fontsize=volfontsize,fontstring=fontvolume)
+        if config['display']['maximalist']:
+            _place_text(image, pricelowstring, x_offset=90, y_offset=height-265,fontsize=30,fontstring=fontvolume, justify="l")
+            _place_text(image, pricehighstring, x_offset=90, y_offset=height-490,fontsize=30,fontstring=fontvolume, justify="l")
         if 'coinnames' in config['display'] and config['display']['coinnames']:
             _place_text(image, whichcoin, x_offset=-175, y_offset=height-500,fontsize=volfontsize,fontstring=fontvolume)
             logging.info("names")
@@ -648,7 +669,7 @@ def currencystringtolist(currstring):
     curr_list = [x.strip(' ') for x in curr_list]
     return curr_list
 
-def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
+def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular", justify='c'):
     '''
     Put some centered text at a location on the image.
     '''
@@ -664,9 +685,12 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
     img_width, img_height = img.size
     text_width, _ = font.getsize(text)
     text_height = fontsize
-
-    draw_x = (img_width - text_width)//2 + x_offset
-    draw_y = (img_height - text_height)//2 + y_offset
+    if justify=="c":
+        draw_x = (img_width - text_width)//2 + x_offset
+        draw_y = (img_height - text_height)//2 + y_offset
+    elif justify=='l':
+        draw_x = (img_width)//2 + x_offset
+        draw_y = (img_height - text_height)//2 + y_offset
     draw.text((draw_x, draw_y), text, font=font,fill=(0,0,0) )
 
 def writewrappedlines(img,text,fontsize,y_text=0,height=60, width=15,fontstring="Forum-Regular"):
