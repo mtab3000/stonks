@@ -35,11 +35,11 @@ picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images')
 quotesfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'data/quotes.tsv')
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
-def mempool(img, config):
+def mempool(img, config, font):
     feesurl='https://mempool.space/api/v1/fees/recommended'
     try:
         rawmempoolfees = requests.get(feesurl).json()
-        _place_text(img,str(rawmempoolfees['hourFee'])+" sat/vB fee", x_offset=-175, y_offset=-105,fontsize=50,fontstring="JosefinSans-Light")
+        _place_text(img,str(rawmempoolfees['hourFee'])+" sat/vB fee", x_offset=-175, y_offset=-105,fontsize=50,fontstring=font)
         success=True
     except:
         success=False
@@ -601,7 +601,7 @@ def updateDisplay(image,config,allprices, volumes):
     text=str(time.strftime("%-I:%M %p, %-d %b %Y"))
     _place_text(image, "Updated: "+text+". "+str(days_ago)+" day data", x_offset=-25, y_offset=-430,fontsize=50,fontstring="JosefinSans-Medium")
     if config['display']['maximalist']==True:
-        image, success=mempool(image, config)
+        image, success=mempool(image, config, fontvolume)
         try:
             d = feedparser.parse(config['display']['feedurl'])
             numberofstories=len(d.entries)
