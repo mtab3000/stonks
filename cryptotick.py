@@ -522,13 +522,16 @@ def updateDisplay(image,config,allprices, volumes):
         fontvolume= "Roboto-Light"
     days_ago=int(config['ticker']['sparklinedays'])   
     # scaling=3/(config['ticker']['coinsperpage'])
-    scaling=3/len(crypto_list)
+    if len(crypto_list) > 1:
+        scaling=3/len(crypto_list)
+    else:
+        scaling=1
     height=int(150*scaling)
     heightincrement=int(295*scaling)
     index=0
     for key in allprices.keys():
         logging.info(str("Price: "+ key))
-        pricenow = allprices[key][-1]
+        pricenow = allprices[key][-1]  
         fiat=fiat_list[index]
         if fiat=="jpy":
             symbolstring="¥"
@@ -610,7 +613,7 @@ def updateDisplay(image,config,allprices, volumes):
         height= 100
         width= 37
         fontsize=70
-        fontstring="JosefinSans-Light"
+        fontstring=fontprice
         if numberofstories > 1:
             storynum=randrange(numberofstories-1)
             text=d.entries[storynum].title
