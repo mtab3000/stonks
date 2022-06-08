@@ -321,7 +321,8 @@ def crypto(img, config):
         allprices, volumes=getData(config)
         # generate sparkline
         logging.info("SPARKLINES")
-        makeSpark(allprices,config['display']['maximalist'])
+        limitbool=bool(len(currencystringtolist(config['ticker']['currency']))<=2)
+        makeSpark(allprices,limitbool)
         logging.info("NOW DISPLAY")
         # update display
         pic=updateDisplay(img,config, allprices, volumes)
