@@ -58,7 +58,7 @@ then, enable the SPI interface and clone this repository using
 
     cd ~
     sudo raspi-config nonint do_spi 0
-    git clone https://github.com/llvllch/stonks
+    git clone https://github.com/veebch/stonks
     cd stonks
    
 Install the modules needed to run this code, using pip and apt-get:
