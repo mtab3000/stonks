@@ -4,6 +4,7 @@ import argparse
 import PIL
 from PIL import Image, ImageDraw, ImageFont,  ImageOps
 from sys import path
+import sys
 from IT8951 import constants
 import matplotlib 
 matplotlib.use('Agg')
@@ -32,12 +33,13 @@ dirname = os.path.dirname(__file__)
 configfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'config.yaml')
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images')
 quotesfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'data/quotes.tsv')
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
-def mempool(img, config):
+def mempool(img, config, font):
     feesurl='https://mempool.space/api/v1/fees/recommended'
     try:
         rawmempoolfees = requests.get(feesurl).json()
-        _place_text(img,str(rawmempoolfees['hourFee'])+" sat/vB fee", x_offset=-175, y_offset=-105,fontsize=50,fontstring="JosefinSans-Light")
+        _place_text(img,str(rawmempoolfees['hourFee'])+" sat/vB fee", x_offset=-175, y_offset=-105,fontsize=50,fontstring=font)
         success=True
     except:
         success=False
@@ -319,7 +321,8 @@ def crypto(img, config):
         allprices, volumes=getData(config)
         # generate sparkline
         logging.info("SPARKLINES")
-        makeSpark(allprices)
+        limitbool=bool(len(currencystringtolist(config['ticker']['currency']))<=2)
+        makeSpark(allprices,limitbool)
         logging.info("NOW DISPLAY")
         # update display
         pic=updateDisplay(img,config, allprices, volumes)
@@ -386,6 +389,15 @@ def beanaproblem(image,message):
 #   Message as QR code to improve error diagnosis
     return image
 
+def getgecko(url):
+    try:
+        geckojson=requests.get(url, headers=headers).json()
+        connectfail=False
+    except requests.exceptions.RequestException as e:
+        logging.error("Issue with CoinGecko")
+        connectfail=True
+        geckojson={}
+    return geckojson, connectfail
 
 def getData(config):
     """
@@ -414,27 +426,35 @@ def getData(config):
             fiat=fiat_list[i]
             whichcoin=crypto_list[i]
             logging.info(whichcoin)
-            geckourl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency="+fiat+"&ids="+whichcoin
-            try:
-                rawlivecoin = requests.get(geckourl,headers=header).json()
-            except requests.exceptions.RequestException as e:
-                logging.info("Issue with CoinGecko")
-                connectbool=True
-                break
-            liveprice = rawlivecoin[0]
-            pricenow= float(liveprice['current_price'])
-            volumenow = float(liveprice['total_volume'])
+            if config['ticker']['exchange']=='default':
+                geckourl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency="+fiat+"&ids="+whichcoin
+                rawlivecoin, connectfail = getgecko(geckourl)
+                liveprice = rawlivecoin[0]
+                pricenow= float(liveprice['current_price'])
+                volumenow = float(liveprice['total_volume'])
+            else: 
+                geckourl= "https://api.coingecko.com/api/v3/exchanges/"+config['ticker']['exchange']+"/tickers?coin_ids="+whichcoin+"&include_exchange_logo=false"
+                rawlivecoin, connectfail = getgecko(geckourl)
+                theindex=-1
+                upperfiat=fiat.upper()
+                for i in range (len(rawlivecoin['tickers'])):
+                    target=rawlivecoin['tickers'][i]['target']
+                    if target==upperfiat:
+                        theindex=i
+                        logging.debug("Found "+upperfiat+" at index " + str(i))
+        #       if UPPERFIAT is not listed as a target theindex==-1 and it is time to go to sleep
+                if  theindex==-1:
+                    logging.error("The exchange is not listing in "+upperfiat+". Misconfigured - shutting down script")
+                    sys.exit()
+                liveprice= rawlivecoin['tickers'][theindex]
+                pricenow= float(liveprice['last'])
+                volumenow = float(liveprice['volume'])
+
             logging.info("Got Live Data From CoinGecko")
             geckourlhistorical = "https://api.coingecko.com/api/v3/coins/"+whichcoin+"/market_chart/range?vs_currency="+fiat+"&from="+str(starttimeseconds)+"&to="+str(endtimeseconds)
             time.sleep(3) # a little polite pause to avoid upsetting coingecko
-            try:
-                rawtimeseries = requests.get(geckourlhistorical,headers=header).json()
-                successstring="Got price for the last "+str(days_ago)+" days from CoinGecko"
-                logging.info(successstring)
-            except requests.exceptions.RequestException as e:
-                logging.info("Issue with CoinGecko")
-                connectbool=True
-                break
+           
+            rawtimeseries, connectfail = getgecko(geckourlhistorical)
             timeseriesarray = rawtimeseries['prices']
             timeseriesstack = []
             length=len (timeseriesarray)
@@ -449,7 +469,7 @@ def getData(config):
             volumes[volstring]=volumenow
             time.sleep(3)
 
-        if connectbool==True:
+        if connectfail==True:
             message="Trying again in ", sleep_time, " seconds"
             logging.info(message)
             time.sleep(sleep_time)  # wait before trying to fetch the data again
@@ -461,7 +481,7 @@ def getData(config):
         raise ValueError ('Goingecko did not return data five times in a row')
     return allprices, volumes
 
-def makeSpark(allprices):
+def makeSpark(allprices,maximalbool):
     # Draw and save the sparkline that represents historical data
 
     # Subtract the mean from the sparkline to make the mean appear on the plot (it's really the x axis)    
@@ -470,9 +490,12 @@ def makeSpark(allprices):
         logging.info(key)    
         x = allprices[key]-np.mean(allprices[key])        # Transform the prices (subtract mean)
 
-        fig, ax = plt.subplots(1,1,figsize=(10,3))        # Choose the aspect ratio of each individual plot
+        fig, ax = plt.subplots(1,1,figsize=(10,3.3))        # Choose the aspect ratio of each individual plot
         plt.plot(x, color='k', linewidth=3)               # Draw the transformed sparkline
-
+        maxvalue= max(x)
+        maxindex= int(np.argmax(x,axis=0))
+        minvalue= min(x)
+        minindex= int(np.argmin(x,axis=0))
 
         # Remove the Y axis
         for k,v in ax.spines.items():                     # No Y axis, and x will show as mean because of transformation
@@ -481,7 +504,12 @@ def makeSpark(allprices):
         ax.set_yticks([])                                 # No ticks
         ax.axhline(c='k', linewidth=2, linestyle=(0, (5, 2, 1, 2)))
 
+        if maximalbool:
+            plt.plot(maxvalue,  marker="v",c="gray",markersize=25)
+            plt.plot(minvalue,  marker="^",c="gray",markersize=25)
+
         # Save the resulting bmp file to the images directory
+
         plt.savefig(os.path.join(picdir, key+'spark.png'), dpi=72)
         plt.close('all') # Close plot to prevent memory error
     return
@@ -495,15 +523,24 @@ def updateDisplay(image,config,allprices, volumes):
     """
     crypto_list = currencystringtolist(config['ticker']['currency'])
     fiat_list=currencystringtolist(config['ticker']['fiatcurrency'])
-
+    if 'bold' in config['display'] and config['display']['bold']:
+        fontprice= "JosefinSans-Medium"
+        fontvolume= "Roboto-Bold"
+    else:
+        fontprice= "JosefinSans-Light"
+        fontvolume= "Roboto-Light"
     days_ago=int(config['ticker']['sparklinedays'])   
-    scaling=3/(config['ticker']['coinsperpage'])
+    # scaling=3/(config['ticker']['coinsperpage'])
+    if len(crypto_list) > 1:
+        scaling=3/len(crypto_list)
+    else:
+        scaling=1
     height=int(150*scaling)
     heightincrement=int(295*scaling)
     index=0
     for key in allprices.keys():
         logging.info(str("Price: "+ key))
-        pricenow = allprices[key][-1]
+        pricenow = allprices[key][-1]  
         fiat=fiat_list[index]
         if fiat=="jpy":
             symbolstring="¥"
@@ -539,14 +576,24 @@ def updateDisplay(image,config,allprices, volumes):
         tokenimage.thumbnail(newsize,Image.ANTIALIAS)
         pricechange = str("%+d" % round((allprices[key][-1]-allprices[key][0])/allprices[key][-1]*100,2))+"%"
         d = decimal.Decimal(str(pricenow)).as_tuple().exponent
+        pricehigh=max(allprices[key])
+        pricelow=min(allprices[key])
         if pricenow > 1000:
             pricenowstring =str(format(int(pricenow),","))
+            pricehighstring = str(format(int(pricehigh),","))
+            pricelowstring = str(format(int(pricelow),","))
         elif pricenow < 1000 and d == -1:
             pricenowstring ="{:.2f}".format(pricenow)
+            pricehighstring ="{:.2f}".format(pricehigh)
+            pricelowstring ="{:.2f}".format(pricelow)
         elif pricenow<0.1:
             pricenowstring ="{:.3g}".format(pricenow)
+            pricehighstring ="{:.3g}".format(pricehigh)
+            pricelowstring ="{:.3g}".format(pricelow)
         else:
             pricenowstring ="{:.5g}".format(pricenow)
+            pricehighstring ="{:.5g}".format(pricehigh)
+            pricelowstring ="{:.5g}".format(pricelow)
         draw = ImageDraw.Draw(image)   
         image.paste(sparkpng, (705,height+40))
         image.paste(tokenimage, (85,height+30))
@@ -556,19 +603,27 @@ def updateDisplay(image,config,allprices, volumes):
             pricefontsize=120
         else:
             pricefontsize=130
-        _place_text(image, text, x_offset=-175, y_offset=height-420,fontsize=pricefontsize,fontstring="Roboto-Light")
+        volfontsize=50
+        _place_text(image, text, x_offset=-175, y_offset=height-420,fontsize=pricefontsize,fontstring=fontprice)
         vol = human_format(volumes[key+"volume"])
-        text=pricechange + " vol:" + symbolstring + vol
-        _place_text(image, text, x_offset=-175, y_offset=height-310,fontsize=50,fontstring="Roboto-Light")
+        if config['ticker']['exchange']=='default':
+            text=pricechange + " vol:" + symbolstring + vol
+        else:
+            text=pricechange + " vol:" + vol # Currency string omitted as gdax provides volume in coin number
+            
+        _place_text(image, text, x_offset=-175, y_offset=height-310,fontsize=volfontsize,fontstring=fontvolume)
+        if len(crypto_list)<=2:
+            _place_text(image, pricelowstring, x_offset=90, y_offset=height-265,fontsize=30,fontstring=fontvolume, justify="l")
+            _place_text(image, pricehighstring, x_offset=90, y_offset=height-490,fontsize=30,fontstring=fontvolume, justify="l")
         if 'coinnames' in config['display'] and config['display']['coinnames']:
-            _place_text(image, whichcoin, x_offset=-175, y_offset=height-500,fontsize=50,fontstring="Roboto-Light")
+            _place_text(image, whichcoin, x_offset=-175, y_offset=height-500,fontsize=volfontsize,fontstring=fontvolume)
             logging.info("names")
         height += heightincrement
         index += 1
     text=str(time.strftime("%-I:%M %p, %-d %b %Y"))
     _place_text(image, "Updated: "+text+". "+str(days_ago)+" day data", x_offset=-25, y_offset=-430,fontsize=50,fontstring="JosefinSans-Medium")
     if config['display']['maximalist']==True:
-        image, success=mempool(image, config)
+        image, success=mempool(image, config, fontvolume)
         try:
             d = feedparser.parse(config['display']['feedurl'])
             numberofstories=len(d.entries)
@@ -580,7 +635,7 @@ def updateDisplay(image,config,allprices, volumes):
         height= 100
         width= 37
         fontsize=70
-        fontstring="JosefinSans-Light"
+        fontstring=fontprice
         if numberofstories > 1:
             storynum=randrange(numberofstories-1)
             text=d.entries[storynum].title
@@ -615,7 +670,7 @@ def currencystringtolist(currstring):
     curr_list = [x.strip(' ') for x in curr_list]
     return curr_list
 
-def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
+def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular", justify='c'):
     '''
     Put some centered text at a location on the image.
     '''
@@ -631,9 +686,12 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
     img_width, img_height = img.size
     text_width, _ = font.getsize(text)
     text_height = fontsize
-
-    draw_x = (img_width - text_width)//2 + x_offset
-    draw_y = (img_height - text_height)//2 + y_offset
+    if justify=="c":
+        draw_x = (img_width - text_width)//2 + x_offset
+        draw_y = (img_height - text_height)//2 + y_offset
+    elif justify=='l':
+        draw_x = (img_width)//2 + x_offset
+        draw_y = (img_height - text_height)//2 + y_offset
     draw.text((draw_x, draw_y), text, font=font,fill=(0,0,0) )
 
 def writewrappedlines(img,text,fontsize,y_text=0,height=60, width=15,fontstring="Forum-Regular"):
@@ -776,6 +834,7 @@ def display_startup(display):
 
 
 def main():
+    img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) ) #initialise image
 #   If we log to a file, we will need to set up log rotation, so for now it goes to /var/log/syslog
     logging.basicConfig(level=logging.DEBUG)
     args = parse_args()
