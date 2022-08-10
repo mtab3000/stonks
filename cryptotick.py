@@ -26,7 +26,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import currency
 import logging
-import gpiozero<
+import gpiozero
 from fake_useragent import UserAgent
 import decimal
 dirname = os.path.dirname(__file__)
