@@ -612,7 +612,7 @@ def updateDisplay(image,config,allprices, volumes):
             text=pricechange + " vol:" + vol # Currency string omitted as gdax provides volume in coin number
             
         _place_text(image, text, x_offset=-175, y_offset=height-310,fontsize=volfontsize,fontstring=fontvolume)
-        if len(crypto_list)<=2:
+        if len(crypto_list)<=3:
             _place_text(image, pricelowstring, x_offset=90, y_offset=height-265,fontsize=30,fontstring=fontvolume, justify="l")
             _place_text(image, pricehighstring, x_offset=90, y_offset=height-490,fontsize=30,fontstring=fontvolume, justify="l")
         if 'coinnames' in config['display'] and config['display']['coinnames']:
