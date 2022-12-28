@@ -8,12 +8,12 @@ display:
   yshift: 30 # Pixels to shift image for fine tuning alignment
   bold: false #Bolder Crypto display
 ticker:
-  currency: bitcoin, ethereum, cardano, binancecoin
+  currency: bitcoin, ethereum, cardano
   exchange: default # if you want price from a specific exchange specify here
   fiatcurrency: usd
   updatefrequency: 60 # Seconds (60 is the lower limit, to preserve epd)
   sparklinedays: 14 # Days of data on graph
-  coinsperpage: 4
+  coinsperpage: 3  
 headlines:
   feedurl: 'https://rss.nytimes.com/services/xml/rss/nyt/US.xml'
   feedname: "New York Times"
