@@ -1,5 +1,4 @@
 numpy>=1.21.0
-fake_useragent>=0.1.13
 matplotlib>=3.4.2
 qrcode>=6.1
 feedparser>=6.0.8
