@@ -61,7 +61,7 @@ then, enable the SPI interface and clone this repository using
     git clone https://github.com/veebch/stonks
     sudo reboot
    
-Install the modules needed to run this code, using pip and apt-get:
+This will reboot the pi. Reconnect to the pi and install the modules needed to run this code, using pip and apt-get:
 
     python3 -m pip install --upgrade pip  
     python3 -m pip install -r requirements.txt
