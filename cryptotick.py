@@ -48,6 +48,10 @@ def mempool(img, config, font):
 def stoic(img, config):
     try:
         while True:
+            filename = os.path.join(dirname, 'images/aristotle.png')
+            imlogo = Image.open(filename)
+            resize = 300,300
+            imlogo.thumbnail(resize)
             numline = -1
             logging.info("get daily stoic")
             stoicurl='https://stoic-quotes.com/api/quote'
@@ -60,7 +64,9 @@ def stoic(img, config):
             height= 110
             width= 38
             fontsize=70
+            img.paste(imlogo,(50, 760))
             img, numline = writewrappedlines(img,quotestring,fontsize,y_text,height, width,fontstring)
+            draw = ImageDraw.Draw(img) 
             draw.line((500,880, 948,880), fill=255, width=3)
             _place_text(img,sourcestring,0,430,70,"JosefinSans-Light")
             if numline<7 and numline >0:
@@ -69,6 +75,7 @@ def stoic(img, config):
             else:
                 img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
     except Exception as e:
+        logging.info(e)
         message="Interlude due to a data pull/print problem (Daily Stoic)"
         img = beanaproblem(img, message)
         success=False
