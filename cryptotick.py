@@ -50,10 +50,10 @@ def stoic(img, config):
         while True:
             logging.info("get word a day")
             stoicurl='https://stoic-quotes.com/api/quote'
-	    rawquote = requests.get(stoicurl,headers={'User-agent': 'Chrome'}).json()
+            rawquote = requests.get(stoicurl,headers={'User-agent': 'Chrome'}).json()
 
-    	    sourcestring=rawquote['author']
-            quotestring=rawquote['text'])
+            sourcestring=rawquote['author']
+            quotestring=rawquote['text']
 
             img, numline =writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
             draw.line((500,880, 948,880), fill=255, width=3)
