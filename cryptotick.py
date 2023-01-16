@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 import currency
 import logging
 import gpiozero
-from fake_useragent import UserAgent
+
 import decimal
 dirname = os.path.dirname(__file__)
 configfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'config.yaml')
@@ -407,9 +407,6 @@ def getData(config):
     num_retries = 5
     crypto_list = currencystringtolist(config['ticker']['currency'])
     fiat_list=currencystringtolist(config['ticker']['fiatcurrency'])
-    ua = UserAgent()
-    header = {'User-Agent':str(ua.chrome)}
-
     logging.info("Getting Data")
     days_ago=int(config['ticker']['sparklinedays'])   
     endtime = int(time.time())

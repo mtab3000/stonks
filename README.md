@@ -59,16 +59,17 @@ then, enable the SPI interface and clone this repository using
     cd ~
     sudo raspi-config nonint do_spi 0
     git clone https://github.com/veebch/stonks
-    cd stonks
+    sudo reboot
    
-Install the modules needed to run this code, using pip and apt-get:
+This will reboot the pi. Reconnect to the pi and install the modules needed to run this code, using pip and apt-get:
 
     python3 -m pip install --upgrade pip  
     python3 -m pip install -r requirements.txt
     sudo apt-get install libatlas-base-dev
 
 Make a copy of the example config file and run the code using:
-
+    
+    cd ~/stonks
     cp config_example.yaml config.yaml
     python3 cryptotick.py
     
