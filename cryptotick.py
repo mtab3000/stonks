@@ -45,7 +45,7 @@ def mempool(img, config, font):
         success=False
     return img, success
 
-def stoic(img, config)
+def stoic(img, config):
     try:
 	while True:
 	    logging.info("get word a day")
