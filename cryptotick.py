@@ -61,8 +61,8 @@ def stoic(img, config):
             if numline<7 and numline >0:
                 success=True
                 break
-	    else:
-            img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
+            else:
+                img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
     except Exception as e:
         message="Interlude doe to a data pull/print problem (Daily Stoic)"
         img = beanaproblem(img, message)
