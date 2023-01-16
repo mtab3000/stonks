@@ -47,9 +47,9 @@ def mempool(img, config, font):
 
 def stoic(img, config):
     try:
-	while True:
-	    logging.info("get word a day")
-	    stoicurl='https://stoic-quotes.com/api/quote'
+        while True:
+            logging.info("get word a day")
+            stoicurl='https://stoic-quotes.com/api/quote'
 	    rawquote = requests.get(stoicurl,headers={'User-agent': 'Chrome'}).json()
 
     	    sourcestring=rawquote['author']
