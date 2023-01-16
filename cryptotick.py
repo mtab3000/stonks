@@ -45,6 +45,19 @@ def mempool(img, config, font):
         success=False
     return img, success
 
+def stoic(img,config):
+    try:
+        logging.info("get stoic quote")
+        stoicurl='https://stoic-quotes.com/api/quote'
+        rawquote = requests.get(url,headers={'User-agent': 'Chrome'}).json()
+        ;:
+        success=True
+    except Exception as e:
+        message="Interlude doe to a data pull/print problem (Daily Stoic)"
+        img = beanaproblem(img, message)
+        success=False
+        time.sleep(10)
+    return img,success
 
 def wordaday(img, config):
     try:
@@ -73,7 +86,7 @@ def wordaday(img, config):
         success=True
     except Exception as e:
         message="Interlude due to a data pull/print problem (Word a Day)"
-        pic = beanaproblem(img,message)
+        img = beanaproblem(img,message)
         success= False
         time.sleep(10)
     return img, success
@@ -114,7 +127,7 @@ def textfilequotes(img, config):
                 img = Image.new("RGB", (264,176), color = (255, 255, 255) )
         except Exception as e:
             message="Interlude due to a data pull/print problem (Text file)"
-            pic = beanaproblem(img,message)
+            img = beanaproblem(img,message)
             success= False
     return img, success
 
@@ -227,7 +240,7 @@ def redditquotes(img, config):
                 img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
     except Exception as e:
         message="Interlude due to a data pull/print problem (Reddit)"
-        pic = beanaproblem(img,message)
+        img = beanaproblem(img,message)
         success= False
         time.sleep(10)
     return img, success
@@ -254,7 +267,7 @@ def newyorkercartoon(img, config):
         success=True
     except Exception as e:
         message="Interlude due to a data pull/print problem (Cartoon)"
-        pic = beanaproblem(img,message)
+        img = beanaproblem(img,message)
         success= False
         time.sleep(10)
     return img, success
@@ -305,7 +318,7 @@ def guardianheadlines(img, config):
         success=True
     except Exception as e:
         message="Interlude due to a data pull/print problem (Headlines)"
-        pic = beanaproblem(img,message)
+        img = beanaproblem(img,message)
         success= False
         time.sleep(10)
     return img, success
