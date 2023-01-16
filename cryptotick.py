@@ -45,19 +45,31 @@ def mempool(img, config, font):
         success=False
     return img, success
 
-def stoic(img,config):
+def stoic(img, config)
     try:
-        logging.info("get stoic quote")
-        stoicurl='https://stoic-quotes.com/api/quote'
-        rawquote = requests.get(url,headers={'User-agent': 'Chrome'}).json()
-        ;:
-        success=True
+	while True:
+	    logging.info("get word a day")
+	    stoicurl='https://stoic-quotes.com/api/quote'
+	    rawquote = requests.get(stoicurl,headers={'User-agent': 'Chrome'}).json()
+
+    	    sourcestring=rawquote['author']
+            quotestring=rawquote['text'])
+
+            img, numline =writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
+            draw.line((500,880, 948,880), fill=255, width=3)
+            _place_text(img,source,0,430,70,"JosefinSans-Light")
+            if numline<7 and numline >0:
+                success=True
+                break
+	    else:
+            img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
     except Exception as e:
         message="Interlude doe to a data pull/print problem (Daily Stoic)"
         img = beanaproblem(img, message)
         success=False
         time.sleep(10)
     return img,success
+
 
 def wordaday(img, config):
     try:
