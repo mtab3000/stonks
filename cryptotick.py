@@ -48,10 +48,11 @@ def mempool(img, config, font):
 def stoic(img, config):
     try:
         while True:
-            logging.info("get word a day")
+            numline = -1
+            logging.info("get daily stoic")
             stoicurl='https://stoic-quotes.com/api/quote'
             rawquote = requests.get(stoicurl,headers={'User-agent': 'Chrome'}).json()
-
+            logging.info("got quote")
             sourcestring=rawquote['author']
             quotestring=rawquote['text']
             fontstring = "JosefinSans-Light"
@@ -59,7 +60,7 @@ def stoic(img, config):
             height= 110
             width= 38
             fontsize=70
-            img, numline =writewrappedlines(img,quotestring,fontsize,y_text,height, width,fontstring)
+            img, numline = writewrappedlines(img,quotestring,fontsize,y_text,height, width,fontstring)
             draw.line((500,880, 948,880), fill=255, width=3)
             _place_text(img,sourcestring,0,430,70,"JosefinSans-Light")
             if numline<7 and numline >0:
