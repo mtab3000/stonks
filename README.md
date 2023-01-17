@@ -120,6 +120,8 @@ sudo reboot
 
 # Video
 
+A demo of some of the features:
+
 [![video](https://img.youtube.com/vi/-270Nn1V2hQ/0.jpg)](https://www.youtube.com/watch?v=Xv8eyp-LJJk)
 
 # Hardware
