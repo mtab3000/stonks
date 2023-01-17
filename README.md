@@ -11,7 +11,7 @@ Big Audrey pulls the stuff that you've told it you're intersted in from the inte
 - Headline (From an RSS feed) (With QR code link to the article)
 - Cartoon (From The New Yorker)
 - Cryptocurrency Dashboard
-- Quote from the Daily Stoic
+- Quote from the Stoic Quotes
 
 ## Functions
 
@@ -45,7 +45,7 @@ Uses code based on the code we made at [btcticker](http://github.com/llvllch/btc
 
 ### Daily Stoic Quote
 
-A quote from dailystoic.com.
+A quote from stoic-quotes.com.
 
 # Prerequisites
 
