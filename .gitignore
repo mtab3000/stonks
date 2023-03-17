@@ -134,3 +134,5 @@ config.yaml
 # Log file
 runlog.log
 .zshrc
+images/*spark.png
+images/currency/*

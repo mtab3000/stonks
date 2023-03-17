@@ -4,13 +4,14 @@
 
 # Big Audrey: Quiet internet content on HD epaper.
 
-Big Audrey pulls the stuff that you've told it you're intersted in from the internet, then displays it in pleasingly crispy fonts on a 6 inch HD epaper screen. The script currently randomly chooses from 5 functions every x minutes and refreshes the display:
+Big Audrey pulls the stuff that you've told it you're intersted in from the internet, then displays it in pleasingly crispy fonts on a 6 inch HD epaper screen. The script currently randomly chooses from 5 functions every x seconds and refreshes the display:
 
 - Quote (from Reddit [r/quotes](https://reddit.com/r/quotes))
 - Word of the day (from [wordsmith.org](https://wordsmith.org))
 - Headline (From an RSS feed) (With QR code link to the article)
 - Cartoon (From The New Yorker)
 - Cryptocurrency Dashboard
+- Quote (from [Stoic Quotes](https://stoic-quotes.com))
 
 ## Functions
 
@@ -42,6 +43,10 @@ A cartoon from The New Yorker RSS feed.
 
 Uses code based on the code we made at [btcticker](http://github.com/llvllch/btcticker). The extra screen size means that three (or four) coins can fit on the screen at once. There is also a maximal mode that will show one coin and an item from and RSS news feed, and a QR code link to that article.
 
+### Daily Stoic Quote
+
+A quote from stoic-quotes.com.
+
 # Prerequisites
 
 - A working Pi with waveshare 6inch HD ePaper attached
@@ -59,16 +64,17 @@ then, enable the SPI interface and clone this repository using
     cd ~
     sudo raspi-config nonint do_spi 0
     git clone https://github.com/veebch/stonks
-    cd stonks
+    sudo reboot
    
-Install the modules needed to run this code, using pip and apt-get:
+This will reboot the pi. Reconnect to the pi and install the modules needed to run this code, using pip and apt-get:
 
     python3 -m pip install --upgrade pip  
     python3 -m pip install -r requirements.txt
     sudo apt-get install libatlas-base-dev
 
 Make a copy of the example config file and run the code using:
-
+    
+    cd ~/stonks
     cp config_example.yaml config.yaml
     python3 cryptotick.py
     
@@ -77,11 +83,11 @@ Make a copy of the example config file and run the code using:
 Edit the file config.yaml. Entries are commented to indicate their function. There are boolean values for activation of modes, as well as a function section that lists the functions that are sampled from on each refresh iteration. There is also a weighting of those samples. 
 
 ```
-function:                           # Extra functionality
-  mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes
-  weight: 1, 10, 1, 1, 1, 0         # Weighting for each of the above respectively
+function:                           
+  mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes, stoic
+  weight: 1, 10, 1, 1, 1, 0, 1       
 ```
-Means that on each iteration there is a 40/1/1 weighting that the code will choose the functions crypto, redditquotes and guardianheadlines respectively.
+Means that on each iteration there is a 1:10:1:1:1:1 weighting that the code will choose the functions crypto, redditquotes, wordaday, newyorkercartoon, guardianheadlines and stoic respectively.
 
 # Add Autostart
 
@@ -114,7 +120,9 @@ sudo reboot
 
 # Video
 
-[![video](https://img.youtube.com/vi/-270Nn1V2hQ/0.jpg)](https://www.youtube.com/watch?v=Xv8eyp-LJJk)
+A demo of some of the features:
+
+[![video](https://img.youtube.com/vi/Xv8eyp-LJJk/0.jpg)](https://www.youtube.com/watch?v=Xv8eyp-LJJk)
 
 # Hardware
 

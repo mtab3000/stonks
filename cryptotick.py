@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 import currency
 import logging
 import gpiozero
-from fake_useragent import UserAgent
+
 import decimal
 dirname = os.path.dirname(__file__)
 configfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'config.yaml')
@@ -44,6 +44,43 @@ def mempool(img, config, font):
     except:
         success=False
     return img, success
+
+def stoic(img, config):
+    try:
+        while True:
+            filename = os.path.join(dirname, 'images/aristotle.png')
+            imlogo = Image.open(filename)
+            resize = 300,300
+            imlogo.thumbnail(resize)
+            numline = -1
+            logging.info("get daily stoic")
+            stoicurl='https://stoic-quotes.com/api/quote'
+            rawquote = requests.get(stoicurl,headers={'User-agent': 'Chrome'}).json()
+            logging.info("got quote")
+            sourcestring=rawquote['author']
+            quotestring=rawquote['text']
+            fontstring = "JosefinSans-Light"
+            y_text= -300
+            height= 110
+            width= 38
+            fontsize=70
+            img.paste(imlogo,(50, 760))
+            img, numline = writewrappedlines(img,quotestring,fontsize,y_text,height, width,fontstring)
+            draw = ImageDraw.Draw(img) 
+            draw.line((500,880, 948,880), fill=255, width=3)
+            _place_text(img,sourcestring,0,430,70,"JosefinSans-Light")
+            if numline<7 and numline >0:
+                success=True
+                break
+            else:
+                img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
+    except Exception as e:
+        logging.info(e)
+        message="Interlude due to a data pull/print problem (Daily Stoic)"
+        img = beanaproblem(img, message)
+        success=False
+        time.sleep(10)
+    return img,success
 
 
 def wordaday(img, config):
@@ -73,7 +110,7 @@ def wordaday(img, config):
         success=True
     except Exception as e:
         message="Interlude due to a data pull/print problem (Word a Day)"
-        pic = beanaproblem(img,message)
+        img = beanaproblem(img,message)
         success= False
         time.sleep(10)
     return img, success
@@ -114,7 +151,7 @@ def textfilequotes(img, config):
                 img = Image.new("RGB", (264,176), color = (255, 255, 255) )
         except Exception as e:
             message="Interlude due to a data pull/print problem (Text file)"
-            pic = beanaproblem(img,message)
+            img = beanaproblem(img,message)
             success= False
     return img, success
 
@@ -227,7 +264,7 @@ def redditquotes(img, config):
                 img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
     except Exception as e:
         message="Interlude due to a data pull/print problem (Reddit)"
-        pic = beanaproblem(img,message)
+        img = beanaproblem(img,message)
         success= False
         time.sleep(10)
     return img, success
@@ -254,7 +291,7 @@ def newyorkercartoon(img, config):
         success=True
     except Exception as e:
         message="Interlude due to a data pull/print problem (Cartoon)"
-        pic = beanaproblem(img,message)
+        img = beanaproblem(img,message)
         success= False
         time.sleep(10)
     return img, success
@@ -305,7 +342,7 @@ def guardianheadlines(img, config):
         success=True
     except Exception as e:
         message="Interlude due to a data pull/print problem (Headlines)"
-        pic = beanaproblem(img,message)
+        img = beanaproblem(img,message)
         success= False
         time.sleep(10)
     return img, success
@@ -321,7 +358,7 @@ def crypto(img, config):
         allprices, volumes=getData(config)
         # generate sparkline
         logging.info("SPARKLINES")
-        limitbool=bool(len(currencystringtolist(config['ticker']['currency']))<=2)
+        limitbool=bool(len(currencystringtolist(config['ticker']['currency']))<=3)
         makeSpark(allprices,limitbool)
         logging.info("NOW DISPLAY")
         # update display
@@ -407,9 +444,6 @@ def getData(config):
     num_retries = 5
     crypto_list = currencystringtolist(config['ticker']['currency'])
     fiat_list=currencystringtolist(config['ticker']['fiatcurrency'])
-    ua = UserAgent()
-    header = {'User-Agent':str(ua.chrome)}
-
     logging.info("Getting Data")
     days_ago=int(config['ticker']['sparklinedays'])   
     endtime = int(time.time())
@@ -612,7 +646,7 @@ def updateDisplay(image,config,allprices, volumes):
             text=pricechange + " vol:" + vol # Currency string omitted as gdax provides volume in coin number
             
         _place_text(image, text, x_offset=-175, y_offset=height-310,fontsize=volfontsize,fontstring=fontvolume)
-        if len(crypto_list)<=2:
+        if len(crypto_list)<=3:
             _place_text(image, pricelowstring, x_offset=90, y_offset=height-265,fontsize=30,fontstring=fontvolume, justify="l")
             _place_text(image, pricehighstring, x_offset=90, y_offset=height-490,fontsize=30,fontstring=fontvolume, justify="l")
         if 'coinnames' in config['display'] and config['display']['coinnames']:
