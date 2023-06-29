@@ -196,7 +196,8 @@ def redditquotes(img, config):
         imlogo = Image.open(filename)
         resize = 300,300
         imlogo.thumbnail(resize)
-        quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=month&limit=100'
+
+        quoteurl = config[quoteurl]
         quotestack = getallquotes(quoteurl)
     #   Tidy quotes
         i=0
@@ -211,6 +212,9 @@ def redditquotes(img, config):
         #   Replace fancypants quotes with vanilla quotes
             quote=re.sub("“", "\"", quote)
             quote=re.sub("”", "\"", quote)
+        #   Ignore anything in brackets
+            quote=re.sub("[*]","", quote)
+            quote=re.sub("(*)","", quote)
             string = quote
             count = quote.count("\"")
             logging.info("Count="+str(count))
