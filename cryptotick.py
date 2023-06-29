@@ -197,7 +197,7 @@ def redditquotes(img, config):
         resize = 300,300
         imlogo.thumbnail(resize)
 
-        quoteurl = config["quoteurl"]
+        quoteurl = config ['display']['quotesurl']
         quotestack = getallquotes(quoteurl)
     #   Tidy quotes
         i=0
