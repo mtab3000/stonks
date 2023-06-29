@@ -268,7 +268,7 @@ def redditquotes(img, config):
             else:
                 img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
     except Exception as e:
-        message="Interlude due to a data pull/print problem (Reddit)"
+        message="Interlude due to a data pull/print problem (Reddit)"+e
         img = beanaproblem(img,message)
         success= False
         time.sleep(10)
