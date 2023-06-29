@@ -213,8 +213,9 @@ def redditquotes(img, config):
             quote=re.sub("“", "\"", quote)
             quote=re.sub("”", "\"", quote)
         #   Ignore anything in brackets
-            quote=re.sub("\[*\]","", quote)
-            quote=re.sub("\(*\)","", quote)
+            quote=re.sub("\[.*?\]","", quote)
+            quote=re.sub("\(.*?\)","", quote)
+            print
             string = quote
             count = quote.count("\"")
             logging.info("Count="+str(count))
