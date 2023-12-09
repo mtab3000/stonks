@@ -1,3 +1,23 @@
+"""
+  main.py - a script for making an ePaper multi-purpose Information Station, 
+    
+     Copyright (C) 2023 Veeb Projects https://veeb.ch
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>
+
+"""
+
 from time import sleep
 from random import randrange
 import argparse
@@ -196,7 +216,8 @@ def redditquotes(img, config):
         imlogo = Image.open(filename)
         resize = 300,300
         imlogo.thumbnail(resize)
-        quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=month&limit=100'
+
+        quoteurl = config ['display']['quotesurl']
         quotestack = getallquotes(quoteurl)
     #   Tidy quotes
         i=0
@@ -211,6 +232,10 @@ def redditquotes(img, config):
         #   Replace fancypants quotes with vanilla quotes
             quote=re.sub("“", "\"", quote)
             quote=re.sub("”", "\"", quote)
+        #   Ignore anything in brackets
+            quote=re.sub("\[.*?\]","", quote)
+            quote=re.sub("\(.*?\)","", quote)
+            print
             string = quote
             count = quote.count("\"")
             logging.info("Count="+str(count))
@@ -263,7 +288,8 @@ def redditquotes(img, config):
             else:
                 img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
     except Exception as e:
-        message="Interlude due to a data pull/print problem (Reddit)"
+        message= "Reddit is a bit rubbish"
+        print (e)
         img = beanaproblem(img,message)
         success= False
         time.sleep(10)
@@ -718,7 +744,7 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
         font = ImageFont.truetype('/usr/share/fonts/TTF/DejaVuSans.ttf', fontsize)
 
     img_width, img_height = img.size
-    text_width, _ = font.getsize(text)
+    text_width = font.getlength(text)
     text_height = fontsize
     if justify=="c":
         draw_x = (img_width - text_width)//2 + x_offset
