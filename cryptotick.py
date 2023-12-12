@@ -646,7 +646,7 @@ def updateDisplay(image,config,allprices, volumes):
             pricenowstring ="{:.2f}".format(pricenow)
             pricehighstring ="{:.2f}".format(pricehigh)
             pricelowstring ="{:.2f}".format(pricelow)
-        elif pricenow<0.1:
+        elif pricenow<0.1 and pricenow > .001:
             pricenowstring ="{:.3g}".format(pricenow)
             pricehighstring ="{:.3g}".format(pricehigh)
             pricelowstring ="{:.3g}".format(pricelow)
