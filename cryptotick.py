@@ -651,16 +651,16 @@ def updateDisplay(image,config,allprices, volumes):
             pricehighstring ="{:.3g}".format(pricehigh)
             pricelowstring ="{:.3g}".format(pricelow)
         else:
-            pricenowstring ="{:.5g}".format(pricenow)
-            pricehighstring ="{:.5g}".format(pricehigh)
-            pricelowstring ="{:.5g}".format(pricelow)
+            pricenowstring ="{:.6g}".format(pricenow)
+            pricehighstring ="{:.6g}".format(pricehigh)
+            pricelowstring ="{:.6g}".format(pricelow)
         draw = ImageDraw.Draw(image)   
         image.paste(sparkpng, (705,height+40))
         image.paste(tokenimage, (85,height+30))
         text=symbolstring+pricenowstring
         logging.info(symbolstring)
         if len(text)>7:
-            pricefontsize=120
+            pricefontsize=110
         else:
             pricefontsize=130
         volfontsize=50
