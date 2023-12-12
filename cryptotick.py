@@ -660,7 +660,7 @@ def updateDisplay(image,config,allprices, volumes):
         text=symbolstring+pricenowstring
         logging.info(symbolstring)
         if len(text)>7:
-            pricefontsize=110
+            pricefontsize=120
         else:
             pricefontsize=130
         volfontsize=50
