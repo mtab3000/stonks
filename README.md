@@ -19,6 +19,10 @@ Big Audrey pulls the stuff that you've told it you're intersted in from the inte
 
 ## Functions
 
+### Cryptocurrency Dashboard
+
+Uses code based on the code we made at [btcticker](http://github.com/llvllch/btcticker). The extra screen size means that two three or four coins can fit on the screen at once. If there is more thant that, it will carousel to show all the coins listed. There is also a maximal mode that will show one coin and an item from and RSS news feed, and a QR code link to that article.
+
 ### Quotes
 
 This is a script that parses content from [r/quotes](https://reddit.com/r/quotes) and tidies it up a little to make an ever-changing Quote poster, using content from the hive-mind that is the internet.
@@ -42,10 +46,6 @@ A headline from an RSS feed from a news source specified in the `config.yaml` fi
 ### Cartoon
 
 A cartoon from The New Yorker RSS feed.
-
-### Cryptocurrency Dashboard
-
-Uses code based on the code we made at [btcticker](http://github.com/llvllch/btcticker). The extra screen size means that two three or four coins can fit on the screen at once. If there is more thant that, it will carousel to show all the coins listed. There is also a maximal mode that will show one coin and an item from and RSS news feed, and a QR code link to that article.
 
 ### Daily Stoic Quote
 
