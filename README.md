@@ -21,7 +21,7 @@ Big Audrey pulls the stuff that you've told it you're intersted in from the inte
 
 ### Cryptocurrency Dashboard
 
-Uses code based on the code we made at [btcticker](http://github.com/llvllch/btcticker). The extra screen size means that two three or four coins can fit on the screen at once. If there is more thant that, it will carousel to show all the coins listed. There is also a maximal mode that will show one coin and an item from and RSS news feed, and a QR code link to that article.
+Uses code based on the code we made at [btcticker](http://github.com/llvllch/btcticker). The extra screen size means that two three or four coins can fit on the screen at once. If you've listed more coins than that, it will carousel to show all the coins listed. There is also a maximal mode that will show one coin and an item from and RSS news feed, and a QR code link to that article.
 
 ### Quotes
 
