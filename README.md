@@ -74,7 +74,7 @@ This will reboot the pi. Reconnect to the pi and install the modules needed to r
 
     python3 -m pip install --upgrade pip  
     python3 -m pip install -r requirements.txt
-    sudo apt-get install libatlas-base-dev
+    sudo apt-get install libatlas-base-dev python3-matplotlib python3-numpy
 
 Make a copy of the example config file and run the code using:
     
