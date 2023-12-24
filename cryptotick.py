@@ -304,7 +304,7 @@ def newyorkercartoon(img, config):
         imagedeets = d.entries[0].media_thumbnail[0]
         imframe = Image.open(requests.get(imagedeets['url'], stream=True).raw)
         resize = 1200,800
-        imframe.thumbnail(resize, Image.ANTIALIAS)
+        imframe.thumbnail(resize, Image.BICUBIC)
         imwidth, imheight = imframe.size
         xvalue= int(1448/2-imwidth/2)
         img.paste(imframe,(xvalue, 75))
@@ -633,7 +633,7 @@ def updateDisplay(image,config,allprices, volumes):
             tokenimage=new_image
             tokenimage.save(tokenfilename)
         newsize=(200,200)
-        tokenimage.thumbnail(newsize,Image.ANTIALIAS)
+        tokenimage.thumbnail(newsize,Image.BICUBIC)
         pricechange = str("%+d" % round((allprices[key][-1]-allprices[key][0])/allprices[key][-1]*100,2))+"%"
         d = decimal.Decimal(str(pricenow)).as_tuple().exponent
         pricehigh=max(allprices[key])
