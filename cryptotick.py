@@ -749,7 +749,7 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
         text_height = font.getbbox(text)[3]
     except:
         text_width = font.getsize(text)[0]
-        text_height = font getsize(text)[1] 
+        text_height = font.getsize(text)[1] 
     if justify=="c":
         draw_x = (img_width - text_width)//2 + x_offset
         draw_y = (img_height - text_height)//2 + y_offset
