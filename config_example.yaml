@@ -6,7 +6,7 @@ display:
   vcom: -2.61 # This is a number specific to your epd, ignore unless you know what it does
   coinnames: false # Include coinnames on display
   xshift: 0 # Pixels to shift image for fine tuning alignment, Positive -> Left
-  yshift: 30 # Pixels to shift image for fine tuning alignment, Positive -> Down
+  yshift: 30 # Pixels to shift image for fine tuning alignment, Positive -> Up
   bold: false #Bolder Crypto display
 ticker:
   currency: bitcoin, ethereum, cardano
