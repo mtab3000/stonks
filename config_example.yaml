@@ -5,8 +5,8 @@ display:
   quotesurl: https://www.reddit.com/r/quotes/top/.json?t=month&limit=100
   vcom: -2.61 # This is a number specific to your epd, ignore unless you know what it does
   coinnames: false # Include coinnames on display
-  xshift: 0 # Pixels to shift image for fine tuning alignment
-  yshift: 30 # Pixels to shift image for fine tuning alignment
+  xshift: 0 # Pixels to shift image for fine tuning alignment, Positive -> Left
+  yshift: 30 # Pixels to shift image for fine tuning alignment, Positive -> Down
   bold: false #Bolder Crypto display
 ticker:
   currency: bitcoin, ethereum, cardano
