@@ -302,9 +302,6 @@ def quote2image(quote, source, img, imlogo):
     img, numline = writewrappedlines(
         img, quote, fontsize, y_text, height, width, fontstring
     )
-    source = splitquote[-1]
-    source = source.strip()
-    source = source.strip("-")
     logging.info(source)
     draw = ImageDraw.Draw(img)
     draw.line((500, 880, 948, 880), fill=255, width=3)
