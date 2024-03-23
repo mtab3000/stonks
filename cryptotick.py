@@ -299,6 +299,8 @@ def quote2image(quote, source, img, imlogo):
     height = 110
     width = 38
     fontsize = 70
+    if len(source) > 20:
+        source = source[0:20] + "..."
     img, numline = writewrappedlines(
         img, quote, fontsize, y_text, height, width, fontstring
     )
