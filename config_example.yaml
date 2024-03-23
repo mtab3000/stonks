@@ -21,5 +21,5 @@ headlines:
 readwise:
   token: goes_here
 function: # Extra functionality
-  mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes, stoic
-  weight: 20, 1, 1, 1, 0, 0, 0 # Weighting for each of the above respectively
+  mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes, stoic, readwise 
+  weight: 0, 0, 0, 0, 0, 0, 0,10 # Weighting for each of the above respectively
