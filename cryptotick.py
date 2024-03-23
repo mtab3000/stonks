@@ -240,7 +240,7 @@ def getallquotes(url):
     return quotestack
 
 
-def readwisequote(img, config):
+def readwise(img, config):
     numline = -1
     filename = os.path.join(dirname, "images/rabbitsq.png")
     imlogo = Image.open(filename)
