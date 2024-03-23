@@ -18,6 +18,8 @@ ticker:
 headlines:
   feedurl: 'https://rss.nytimes.com/services/xml/rss/nyt/US.xml'
   feedname: "New York Times"
+readwise:
+  token: goes_here
 function: # Extra functionality
   mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes, stoic
   weight: 20, 1, 1, 1, 0, 0, 0 # Weighting for each of the above respectively
