@@ -18,7 +18,6 @@
 
 """
 
-from _typeshed import SupportsItemAccess
 from time import sleep
 from random import randrange
 import argparse
