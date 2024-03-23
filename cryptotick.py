@@ -343,8 +343,6 @@ def redditquotes(img, config):
             #   Ignore anything in brackets
             quote = re.sub("\[.*?\]", "", quote)
             quote = re.sub("\(.*?\)", "", quote)
-            print
-            string = quote
             count = quote.count('"')
             logging.info("Count=" + str(count))
             if count >= 2:
@@ -944,13 +942,6 @@ def updateDisplay(image, config, allprices, volumes):
             nodelogo = Image.open(nodeicon)
             image.paste(nodelogo, (130, 800))
     return image
-
-
-def currencystringtolist(currstring):
-    # Takes the string for currencies in the config.yaml file and turns it into a list
-    curr_list = currstring.split(",")
-    curr_list = [x.strip(" ") for x in curr_list]
-    return curr_list
 
 
 def _place_text(
