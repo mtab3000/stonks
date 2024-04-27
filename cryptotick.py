@@ -293,7 +293,7 @@ def readwise(img, config):
 
 
 def quote2image(quote, source, img, imlogo):
-    img.paste(imlogo, (50, 760))
+    img.paste(imlogo, (50, 810))
     fontstring = "JosefinSans-Light"
     y_text = -300
     height = 110
