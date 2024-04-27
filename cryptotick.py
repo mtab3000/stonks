@@ -242,7 +242,7 @@ def getallquotes(url):
 
 def readwise(img, config):
     numline = -1
-    filename = os.path.join(dirname, "images/rabbitsq.png")
+    filename = os.path.join(dirname, "images/book.png")
     imlogo = Image.open(filename)
     resize = 300, 300
     imlogo.thumbnail(resize)
