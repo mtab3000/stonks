@@ -165,7 +165,7 @@ def textfilequotes(img, config):
     imlogo = Image.open(filename)
     resize = 200, 200
     imlogo.thumbnail(resize)
-    img.paste(imlogo, (100, 760))
+    img.paste(imlogo, (100, 810))
     # Grab The contents of the quotes file, "quotes.csv"
     data = pd.read_csv(quotesfile, sep="\t")
     logging.info(data.head())
