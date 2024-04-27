@@ -161,9 +161,9 @@ def textfilequotes(img, config):
     import pandas as pd
 
     success = False
-    filename = os.path.join(dirname, "images/rabbitsq.png")
+    filename = os.path.join(dirname, "images/book   .png")
     imlogo = Image.open(filename)
-    resize = 300, 300
+    resize = 200, 200
     imlogo.thumbnail(resize)
     img.paste(imlogo, (100, 760))
     # Grab The contents of the quotes file, "quotes.csv"
