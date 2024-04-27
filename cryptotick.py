@@ -161,7 +161,7 @@ def textfilequotes(img, config):
     import pandas as pd
 
     success = False
-    filename = os.path.join(dirname, "images/book   .png")
+    filename = os.path.join(dirname, "images/book.png")
     imlogo = Image.open(filename)
     resize = 200, 200
     imlogo.thumbnail(resize)
