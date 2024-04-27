@@ -244,7 +244,7 @@ def readwise(img, config):
     numline = -1
     filename = os.path.join(dirname, "images/book.png")
     imlogo = Image.open(filename)
-    resize = 300, 300
+    resize = 200, 200
     imlogo.thumbnail(resize)
     token = config["readwise"]["token"]
 
