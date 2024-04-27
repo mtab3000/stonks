@@ -136,4 +136,4 @@ runlog.log
 .zshrc
 images/*spark.png
 images/currency/*.png
-data/quotes.tsv
+./data/quotes.tsv
