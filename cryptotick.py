@@ -172,8 +172,12 @@ def textfilequotes(img, config):
     while True:
         choose = data.sample(replace=True)
         logging.info(choose)
-        quote = choose.iat[0, 0]
-        source = choose.iat[0, 1]
+        try:
+            quote = choose.iat[0, 0]
+            source = choose.iat[0, 1]
+        except:
+            quote = choose.iat[0,0]
+            source = 'Unknown'
         try:
             logging.info("Manual File")
             if len(source) <= 25:
