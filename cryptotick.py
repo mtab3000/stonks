@@ -63,25 +63,29 @@ headers = {
 
 def blinking_dot(epd, x, y, size, interval=1):
     """
-    Displays a blinking dot at the specified position on the e-paper display.
+    Blinks a dot at the specified position.
     Args:
         epd: The e-paper display object.
-        x: X-coordinate of the dot's top-left corner.
-        y: Y-coordinate of the dot's top-left corner.
-        size: Size (width and height) of the dot.
-        interval: Blinking interval in seconds.
+        x, y: Coordinates for the top-left corner of the dot.
+        size: Size of the dot.
+        interval: Time interval (seconds) for blinking.
     """
     toggle = True
     while True:
-        color = 0 if toggle else 1  # 0 = black, 1 = white (adjust if reversed)
-        toggle = not toggle
-        
-        # Draw the dot (a filled rectangle as a dot)
-        epd.fill_rect(x, y, size, size, color)
-        epd.update_partial(x, y, size, size)  # Use partial update for better performance
-        
-        # Wait for the specified interval
-        time.sleep(interval)
+        try:
+            # Set the color for the dot
+            color = 0x00 if toggle else 0xFF  # Adjust based on library (0x00 = black, 0xFF = white)
+            toggle = not toggle
+            
+            # Draw the dot
+            epd.fill_rect(x, y, size, size, color)  # Adjust function names as needed
+            epd.update(x, y, x + size, y + size)   # Partial update for the dot area
+
+            # Pause before toggling again
+            time.sleep(interval)
+        except Exception as e:
+            print(f"Error in blinking dot thread: {e}")
+            break
 
 
 def mempool(img, config, font):
