@@ -72,7 +72,7 @@ def blinking_dot(epd, x, y, width, height, interval=1):
         toggle = not toggle
         
         # Update a small region on the screen
-        epd.fill_rect(x, y, width, height, color)
+        place_text(display.frame_buf, 'update', x_offset=+display.width//4)
         epd.draw_partial(constants.DisplayModes.DU)  # Use partial update if supported
         
         # Wait for the specified interval
