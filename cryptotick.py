@@ -122,6 +122,7 @@ def display_gradient(display):
         fontstring="Roboto-Light",
     )
     img.paste(imlogo, (574, 600))
+    display.frame_buf.paste(img, paste_coords)
     display.draw_full(constants.DisplayModes.GC16)
 
     # then add some black and white bars on top of it, to test updating with DU on top of GC16
