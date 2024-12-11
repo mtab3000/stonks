@@ -1283,8 +1283,8 @@ def main():
     # Calculate position for the dot in the top-right corner
     dot_size = 10  # Size of the blinking dot
     screen_width, screen_height = display.width, display.height  # Replace with actual methods to get screen dimensions
-    dot_x = screen_width - dot_size - 50 # 50-pixel padding from the right edge
-    dot_y = 50  # 50-pixel padding from the top edge
+    dot_x = screen_width - dot_size - 150 # 150-pixel padding from the right edge
+    dot_y = 150  # 150-pixel padding from the top edge
 
     # Start the blinking dot thread
     dot_thread = threading.Thread(
