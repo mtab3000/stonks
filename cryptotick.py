@@ -48,7 +48,7 @@ import matplotlib.pyplot as plt
 import currency
 import logging
 import gpiozero
-
+import threading
 import decimal
 
 dirname = os.path.dirname(__file__)
@@ -60,6 +60,28 @@ quotesfile = os.path.join(
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"
 }
+
+def blinking_dot(epd, x, y, size, interval=1):
+    """
+    Displays a blinking dot at the specified position on the e-paper display.
+    Args:
+        epd: The e-paper display object.
+        x: X-coordinate of the dot's top-left corner.
+        y: Y-coordinate of the dot's top-left corner.
+        size: Size (width and height) of the dot.
+        interval: Blinking interval in seconds.
+    """
+    toggle = True
+    while True:
+        color = 0 if toggle else 1  # 0 = black, 1 = white (adjust if reversed)
+        toggle = not toggle
+        
+        # Draw the dot (a filled rectangle as a dot)
+        epd.fill_rect(x, y, size, size, color)
+        epd.update_partial(x, y, size, size)  # Use partial update for better performance
+        
+        # Wait for the specified interval
+        time.sleep(interval)
 
 
 def mempool(img, config, font):
@@ -1258,6 +1280,20 @@ def main():
         display
     )  # Note missing brackets, it's a label
     display_startup(display)
+    # Calculate position for the dot in the top-right corner
+    dot_size = 10  # Size of the blinking dot
+    screen_width, screen_height = display.width, display.height  # Replace with actual methods to get screen dimensions
+    dot_x = screen_width - dot_size - 5  # 5-pixel padding from the right edge
+    dot_y = 5  # 5-pixel padding from the top edge
+
+    # Start the blinking dot thread
+    dot_thread = threading.Thread(
+        target=blinking_dot,
+        args=(display, dot_x, dot_y, dot_size),
+        daemon=True
+    )
+    dot_thread.start()
+  
     try:
         while True:
             thefunction = random.choices(my_list, weights=weights, k=1)[0]
