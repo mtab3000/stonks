@@ -9,17 +9,16 @@ display:
   yshift: 30 # Pixels to shift image for fine tuning alignment, Positive -> Up
   bold: false #Bolder Crypto display
 ticker:
-  currency: bitcoin, ethereum, cardano
+  symbol: BTC-USD, ETH-USD, SWIPES-USD
   exchange: default # if you want price from a specific exchange specify here
-  fiatcurrency: usd
   updatefrequency: 60 # Seconds (60 is the lower limit, to preserve epd)
   sparklinedays: 14 # Days of data on graph
-  coinsperpage: 3  
+  coinsperpage: 3
 headlines:
   feedurl: 'https://rss.nytimes.com/services/xml/rss/nyt/US.xml'
   feedname: "New York Times"
 readwise:
   token: goes_here
 function: # Extra functionality
-  mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes, stoic, readwise 
+  mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes, stoic, readwise
   weight: 0, 0, 0, 0, 0, 0, 0,10 # Weighting for each of the above respectively
