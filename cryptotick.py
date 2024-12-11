@@ -1171,7 +1171,7 @@ def display_startup(display):
         fontsize=50,
         fontstring="Roboto-Light",
     )
-    img.paste(imlogo, (100, 600))
+    img.paste(imlogo, (574, 600))
     # update display
     img = img.rotate(180, expand=True)
     display.frame_buf.paste(img, paste_coords)
