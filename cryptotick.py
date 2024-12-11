@@ -61,31 +61,22 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"
 }
 
-def blinking_dot(epd, x, y, size, interval=1):
+def activity_indicator(epd, x, y, width, height, interval=1):
     """
-    Blinks a dot at the specified position.
-    Args:
-        epd: The e-paper display object.
-        x, y: Coordinates for the top-left corner of the dot.
-        size: Size of the dot.
-        interval: Time interval (seconds) for blinking.
+    Function to show a proof-of-life activity symbol.
     """
     toggle = True
     while True:
-        try:
-            # Set the color for the dot
-            color = 0x00 if toggle else 0xFF  # Adjust based on library (0x00 = black, 0xFF = white)
-            toggle = not toggle
-            
-            # Draw the dot
-            epd.fill_rect(x, y, size, size, color)  # Adjust function names as needed
-            epd.update(x, y, x + size, y + size)   # Partial update for the dot area
-
-            # Pause before toggling again
-            time.sleep(interval)
-        except Exception as e:
-            print(f"Error in blinking dot thread: {e}")
-            break
+        # Draw the symbol (e.g., a black or white square toggling)
+        color = 0 if toggle else 1  # Adjust depending on the driver (0 = black, 1 = white)
+        toggle = not toggle
+        
+        # Update a small region on the screen
+        epd.fill_rect(x, y, width, height, color)
+        epd.draw_partial(x, y, width, height)  # Use partial update if supported
+        
+        # Wait for the specified interval
+        time.sleep(interval)
 
 
 def mempool(img, config, font):
