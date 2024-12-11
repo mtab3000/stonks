@@ -77,6 +77,39 @@ def display_gradient(display):
         display.frame_buf.paste(color, box=box)
 
     # update display
+        _place_text(
+        img,
+        "VEEB Projects",
+        x_offset=0,
+        y_offset=-350,
+        fontsize=100,
+        fontstring="Roboto-Light",
+    )
+    _place_text(
+        img,
+        "Connected: " + ssid,
+        x_offset=0,
+        y_offset=-240,
+        fontsize=50,
+        fontstring="Roboto-Light",
+    )
+    _place_text(
+        img,
+        "IP: " + get_ip(),
+        x_offset=0,
+        y_offset=-180,
+        fontsize=50,
+        fontstring="Roboto-Light",
+    )
+    _place_text(
+        img,
+        "Loading data...",
+        x_offset=0,
+        y_offset=-120,
+        fontsize=50,
+        fontstring="Roboto-Light",
+    )
+    img.paste(imlogo, (574, 600))
     display.draw_full(constants.DisplayModes.GC16)
 
     # then add some black and white bars on top of it, to test updating with DU on top of GC16
