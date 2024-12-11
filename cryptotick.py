@@ -61,7 +61,7 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"
 }
 
-def activity_indicator(epd, x, y, width, height, interval=1):
+def blinking_dot(epd, x, y, width, height, interval=1):
     """
     Function to show a proof-of-life activity symbol.
     """
