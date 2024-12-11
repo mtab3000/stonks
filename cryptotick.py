@@ -650,7 +650,7 @@ def getData(config):
                 + "&to="
                 + str(endtimeseconds)
             )
-            time.sleep(3)  # a little polite pause to avoid upsetting coingecko
+            time.sleep(30)  # a little polite pause to avoid upsetting coingecko
 
             rawtimeseries, connectfail = getgecko(geckourlhistorical)
             timeseriesarray = rawtimeseries["prices"]
