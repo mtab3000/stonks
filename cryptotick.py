@@ -63,7 +63,19 @@ headers = {
 
 def display_gradient(display):
     print('Displaying gradient...')
-
+    dims = (display.width, display.height)
+    img = Image.new("RGB", (1448, 1072), color=(255, 255, 255))
+    img.thumbnail(dims)
+    paste_coords = [
+        dims[i] - img.size[i] for i in (0, 1)
+    ]  # align image with bottom of display
+    # set frame buffer to gradient
+    ssid = os.popen("sudo iwgetid -r").read()
+    filename = os.path.join(dirname, "images/rabbitsq.png")
+    imlogo = Image.open(filename)
+    resize = 400, 400
+    imlogo.thumbnail(resize)
+    img = Image.new("RGB", (1448, 1072), color=(255, 255, 255))
     # set frame buffer to gradient
     for i in range(16):
         color = i*0x10
@@ -78,7 +90,7 @@ def display_gradient(display):
 
     # update display
         _place_text(
-        display,
+        img,
         "VEEB Projects",
         x_offset=0,
         y_offset=-350,
@@ -86,7 +98,7 @@ def display_gradient(display):
         fontstring="Roboto-Light",
     )
     _place_text(
-        display,
+        img,
         "Connected: " + ssid,
         x_offset=0,
         y_offset=-240,
@@ -94,7 +106,7 @@ def display_gradient(display):
         fontstring="Roboto-Light",
     )
     _place_text(
-        display,
+        img,
         "IP: " + get_ip(),
         x_offset=0,
         y_offset=-180,
@@ -102,14 +114,14 @@ def display_gradient(display):
         fontstring="Roboto-Light",
     )
     _place_text(
-        display,
+        img,
         "Loading data...",
         x_offset=0,
         y_offset=-120,
         fontsize=50,
         fontstring="Roboto-Light",
     )
-    disolay.paste(imlogo, (574, 600))
+    img.paste(imlogo, (574, 600))
     display.draw_full(constants.DisplayModes.GC16)
 
     # then add some black and white bars on top of it, to test updating with DU on top of GC16
