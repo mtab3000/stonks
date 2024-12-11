@@ -61,22 +61,32 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"
 }
 
-def blinking_dot(epd, x, y, width, height, interval=1):
-    """
-    Function to show a proof-of-life activity symbol.
-    """
-    toggle = True
-    while True:
-        # Draw the symbol (e.g., a black or white square toggling)
-        color = 0 if toggle else 1  # Adjust depending on the driver (0 = black, 1 = white)
-        toggle = not toggle
-        
-        # Update a small region on the screen
-        place_text(display.frame_buf, 'update', x_offset=+display.width//4)
-        epd.draw_partial(constants.DisplayModes.DU)  # Use partial update if supported
-        
-        # Wait for the specified interval
-        time.sleep(interval)
+def display_gradient(display):
+    print('Displaying gradient...')
+
+    # set frame buffer to gradient
+    for i in range(16):
+        color = i*0x10
+        box = (
+            i*display.width//16,      # xmin
+            0,                        # ymin
+            (i+1)*display.width//16,  # xmax
+            display.height            # ymax
+        )
+
+        display.frame_buf.paste(color, box=box)
+
+    # update display
+    display.draw_full(constants.DisplayModes.GC16)
+
+    # then add some black and white bars on top of it, to test updating with DU on top of GC16
+    box = (0, display.height//5, display.width, 2*display.height//5)
+    display.frame_buf.paste(0x00, box=box)
+
+    box = (0, 3*display.height//5, display.width, 4*display.height//5)
+    display.frame_buf.paste(0xF0, box=box)
+
+    display.draw_partial(constants.DisplayModes.DU)
 
 
 def mempool(img, config, font):
@@ -1274,19 +1284,7 @@ def main():
     button.when_pressed = lambda: togglebutton(
         display
     )  # Note missing brackets, it's a label
-    display_startup(display)
-    # Calculate position for the dot in the top-right corner
-    dot_size = 20  # Size of the blinking dot
-    dot_x = 150 # 150-pixel padding from the left edge
-    dot_y = 150  # 150-pixel padding from the top edge
-
-    # Start the blinking dot thread
-    dot_thread = threading.Thread(
-        target=blinking_dot,
-        args=(display, dot_x, dot_y, dot_size),
-        daemon=True
-    )
-    dot_thread.start()
+    display_gradient(display)
   
     try:
         while True:
