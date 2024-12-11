@@ -1251,11 +1251,6 @@ def main():
     while internet() == False:
         logging.info("Waiting for Internet")
         time.sleep(1)
-    # Set timezone based on ip address
-    try:
-        os.system("sudo /usr/local/bin/tzupdate")
-    except:
-        logging.info("Timezone Not Set")
     lastrefresh = time.time()
     # Set up the button
     button = gpiozero.Button(17)
