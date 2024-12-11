@@ -665,7 +665,7 @@ def getData(config):
             logging.info(str("Crypto fiat combo: " + whichcoin + fiat))
             volstring = str(str(whichcoin + fiat) + "volume")
             volumes[volstring] = volumenow
-            time.sleep(3)
+            time.sleep(30)
 
         if connectfail == True:
             message = "Trying again in ", sleep_time, " seconds"
