@@ -1141,7 +1141,7 @@ def display_startup(display):
     img = Image.new("RGB", (1448, 1072), color=(255, 255, 255))
     _place_text(
         img,
-        "www.veeb.ch",
+        "VEEB Projects",
         x_offset=0,
         y_offset=-350,
         fontsize=100,
@@ -1149,7 +1149,7 @@ def display_startup(display):
     )
     _place_text(
         img,
-        "Connection: " + ssid,
+        "Connected: " + ssid,
         x_offset=0,
         y_offset=-240,
         fontsize=50,
@@ -1160,6 +1160,14 @@ def display_startup(display):
         "IP: " + get_ip(),
         x_offset=0,
         y_offset=-180,
+        fontsize=50,
+        fontstring="Roboto-Light",
+    )
+    _place_text(
+        img,
+        "Loading data...",
+        x_offset=0,
+        y_offset=-120,
         fontsize=50,
         fontstring="Roboto-Light",
     )
