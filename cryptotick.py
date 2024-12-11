@@ -73,7 +73,7 @@ def activity_indicator(epd, x, y, width, height, interval=1):
         
         # Update a small region on the screen
         epd.fill_rect(x, y, width, height, color)
-        epd.draw_partial(x, y, width, height)  # Use partial update if supported
+        epd.draw_partial(constants.DisplayModes.DU)  # Use partial update if supported
         
         # Wait for the specified interval
         time.sleep(interval)
