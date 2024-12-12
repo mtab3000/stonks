@@ -63,32 +63,14 @@ headers = {
 
 def display_gradient(display):
     print('Displaying gradient...')
+    img = Image.new("RGB", (1448, 1072), color=(255, 255, 255))
     dims = (display.width, display.height)
-
-    # set frame buffer to gradient
-    for i in range(16):
-        color = i*0x10
-        box = (
-            i*display.width//16,      # xmin
-            0,                        # ymin
-            (i+1)*display.width//16,  # xmax
-            display.height            # ymax
-        )
-
-        display.frame_buf.paste(color, box=box)
-
-    # update display
-
+    filename = os.path.join(dirname, "images/thebee.png")
+    imlogo = Image.open(filename)
+    img.paste(imlogo, (0, 0))
+    img = img.rotate(180, expand=True)
+    display.frame_buf.paste(img, paste_coords)
     display.draw_full(constants.DisplayModes.GC16)
-
-    # then add some black and white bars on top of it, to test updating with DU on top of GC16
-    box = (0, display.height//5, display.width, 2*display.height//5)
-    display.frame_buf.paste(0x00, box=box)
-
-    box = (0, 3*display.height//5, display.width, 4*display.height//5)
-    display.frame_buf.paste(0xF0, box=box)
-
-    display.draw_partial(constants.DisplayModes.DU)
 
 
 def mempool(img, config, font):
