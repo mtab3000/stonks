@@ -1196,7 +1196,7 @@ def display_startup(display):
         img,
         "Loading data. Approx 3 minutes.",
         x_offset=0,
-        y_offset=-120,
+        y_offset=-80,
         fontsize=50,
         fontstring="Roboto-Light",
     )
