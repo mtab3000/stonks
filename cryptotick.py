@@ -1245,7 +1245,7 @@ def main():
         )
         display_image_8bpp(display, img, config)
         exit(0)
-
+    display_gradient(display)
     my_list = currencystringtolist(config["function"]["mode"])
     weightstring = currencystringtolist(config["function"]["weight"])
     weights = [int(i) for i in weightstring]
@@ -1286,7 +1286,6 @@ def main():
     button.when_pressed = lambda: togglebutton(
         display
     )  # Note missing brackets, it's a label
-    display_gradient(display)
     time.sleep(3)
     display_startup(display)
     try:
