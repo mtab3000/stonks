@@ -1170,7 +1170,7 @@ def display_startup(display):
     img = Image.new("RGB", (1448, 1072), color=(255, 255, 255))
     _place_text(
         img,
-        "VEEB Projects",
+        "VEEB Projects: TickerXL",
         x_offset=0,
         y_offset=-350,
         fontsize=100,
@@ -1178,7 +1178,7 @@ def display_startup(display):
     )
     _place_text(
         img,
-        "Connected: " + ssid,
+        "Connected to WiFi: " + ssid,
         x_offset=0,
         y_offset=-240,
         fontsize=50,
@@ -1186,7 +1186,7 @@ def display_startup(display):
     )
     _place_text(
         img,
-        "IP: " + get_ip(),
+        "IP Address: " + get_ip(),
         x_offset=0,
         y_offset=-180,
         fontsize=50,
@@ -1194,7 +1194,7 @@ def display_startup(display):
     )
     _place_text(
         img,
-        "Loading data...",
+        "Loading data. Approx 2 minutes.",
         x_offset=0,
         y_offset=-120,
         fontsize=50,
