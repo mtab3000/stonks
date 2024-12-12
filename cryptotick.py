@@ -65,6 +65,10 @@ def display_gradient(display):
     print('Displaying gradient...')
     img = Image.new("RGB", (1448, 1072), color=(255, 255, 255))
     dims = (display.width, display.height)
+    paste_coords = [
+        dims[i] - img.size[i] for i in (0, 1)
+    ]  # align image with bottom of display
+    # set frame buffer to gradient
     filename = os.path.join(dirname, "images/thebee.png")
     imlogo = Image.open(filename)
     img.paste(imlogo, (0, 0))
