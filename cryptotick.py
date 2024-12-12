@@ -1200,6 +1200,14 @@ def display_startup(display):
         fontsize=50,
         fontstring="Roboto-Light",
     )
+    _place_text(
+        img,
+        "www.veeb.ch",
+        x_offset=0,
+        y_offset=300,
+        fontsize=50,
+        fontstring="Roboto-Light",
+    )
     img.paste(imlogo, (574, 600))
     # update display
     img = img.rotate(180, expand=True)
