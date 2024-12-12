@@ -48,7 +48,7 @@ import matplotlib.pyplot as plt
 import currency
 import logging
 import gpiozero
-
+import threading
 import decimal
 
 dirname = os.path.dirname(__file__)
@@ -60,6 +60,35 @@ quotesfile = os.path.join(
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"
 }
+
+def display_gradient(display):
+    print('Displaying gradient...')
+    dims = (display.width, display.height)
+
+    # set frame buffer to gradient
+    for i in range(16):
+        color = i*0x10
+        box = (
+            i*display.width//16,      # xmin
+            0,                        # ymin
+            (i+1)*display.width//16,  # xmax
+            display.height            # ymax
+        )
+
+        display.frame_buf.paste(color, box=box)
+
+    # update display
+
+    display.draw_full(constants.DisplayModes.GC16)
+
+    # then add some black and white bars on top of it, to test updating with DU on top of GC16
+    box = (0, display.height//5, display.width, 2*display.height//5)
+    display.frame_buf.paste(0x00, box=box)
+
+    box = (0, 3*display.height//5, display.width, 4*display.height//5)
+    display.frame_buf.paste(0xF0, box=box)
+
+    display.draw_partial(constants.DisplayModes.DU)
 
 
 def mempool(img, config, font):
@@ -1141,7 +1170,7 @@ def display_startup(display):
     img = Image.new("RGB", (1448, 1072), color=(255, 255, 255))
     _place_text(
         img,
-        "VEEB Projects",
+        "VEEB Projects: TickerXL",
         x_offset=0,
         y_offset=-350,
         fontsize=100,
@@ -1149,7 +1178,7 @@ def display_startup(display):
     )
     _place_text(
         img,
-        "Connected: " + ssid,
+        "Connected to WiFi: " + ssid,
         x_offset=0,
         y_offset=-240,
         fontsize=50,
@@ -1157,7 +1186,7 @@ def display_startup(display):
     )
     _place_text(
         img,
-        "IP: " + get_ip(),
+        "IP Address: " + get_ip(),
         x_offset=0,
         y_offset=-180,
         fontsize=50,
@@ -1165,13 +1194,21 @@ def display_startup(display):
     )
     _place_text(
         img,
-        "Loading data...",
+        "Loading data. Approx 3 minutes.",
         x_offset=0,
-        y_offset=-120,
+        y_offset=-80,
         fontsize=50,
         fontstring="Roboto-Light",
     )
-    img.paste(imlogo, (100, 600))
+    _place_text(
+        img,
+        "www.veeb.ch",
+        x_offset=0,
+        y_offset=400,
+        fontsize=50,
+        fontstring="Roboto-Light",
+    )
+    img.paste(imlogo, (574, 600))
     # update display
     img = img.rotate(180, expand=True)
     display.frame_buf.paste(img, paste_coords)
@@ -1216,7 +1253,7 @@ def main():
         )
         display_image_8bpp(display, img, config)
         exit(0)
-
+    display_gradient(display)
     my_list = currencystringtolist(config["function"]["mode"])
     weightstring = currencystringtolist(config["function"]["weight"])
     weights = [int(i) for i in weightstring]
@@ -1251,17 +1288,13 @@ def main():
     while internet() == False:
         logging.info("Waiting for Internet")
         time.sleep(1)
-    # Set timezone based on ip address
-    try:
-        os.system("sudo /usr/local/bin/tzupdate")
-    except:
-        logging.info("Timezone Not Set")
     lastrefresh = time.time()
     # Set up the button
     button = gpiozero.Button(17)
     button.when_pressed = lambda: togglebutton(
         display
     )  # Note missing brackets, it's a label
+    time.sleep(3)
     display_startup(display)
     try:
         while True:
