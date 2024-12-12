@@ -1194,7 +1194,7 @@ def display_startup(display):
     )
     _place_text(
         img,
-        "Loading data. Approx 2 minutes.",
+        "Loading data. Approx 3 minutes.",
         x_offset=0,
         y_offset=-120,
         fontsize=50,
@@ -1204,7 +1204,7 @@ def display_startup(display):
         img,
         "www.veeb.ch",
         x_offset=0,
-        y_offset=300,
+        y_offset=400,
         fontsize=50,
         fontstring="Roboto-Light",
     )
