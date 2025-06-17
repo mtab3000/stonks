@@ -1,25 +1,82 @@
+# Stonks ePaper Crypto Ticker Configuration
+# Copy this file to config.yaml and modify as needed
+
+# Display settings
 display:
-  inverted: false # If True, black background grey text
-  maximalist: false # Bitcoin Maximalist mode. Only one currency with a news feed item from url b
-  feedurl: https://bitcoinmagazine.com/.rss/full/
-  quotesurl: https://www.reddit.com/r/quotes/top/.json?t=month&limit=100
-  vcom: -2.61 # This is a number specific to your epd, ignore unless you know what it does
-  coinnames: false # Include coinnames on display
-  xshift: 0 # Pixels to shift image for fine tuning alignment, Positive -> Left
-  yshift: 30 # Pixels to shift image for fine tuning alignment, Positive -> Up
-  bold: false #Bolder Crypto display
+  inverted: false              # Invert display colors (true/false)
+  maximalist: false            # Bitcoin-only mode with news (true/false)
+  feedurl: 'https://bitcoinmagazine.com/.rss/full/'  # RSS feed for maximalist mode
+  quotesurl: 'https://www.reddit.com/r/quotes/top/.json?t=month&limit=100'  # Reddit quotes
+  vcom: -2.61                  # Display voltage compensation (adjust for your display)
+  coinnames: false             # Show cryptocurrency names (true/false)
+  xshift: 0                    # Horizontal display offset
+  yshift: 30                   # Vertical display offset
+  bold: false                  # Use bold fonts (true/false)
+
+# Cryptocurrency ticker settings
 ticker:
-  currency: bitcoin, ethereum, solana, polkadot  # ✅ CORRECT - Use CoinGecko coin ID
-  fiatcurrency: USD
-  exchange: default # if you want price from a specific exchange specify here
-  updatefrequency: 60 # Seconds (60 is the lower limit, to preserve epd)
-  sparklinedays: 14 # Days of data on graph
-  coinsperpage: 3
+  # IMPORTANT: Use CoinGecko coin IDs, NOT ticker symbols or fiat currencies
+  # Common coin IDs: bitcoin, ethereum, litecoin, dogecoin, cardano, solana
+  # Find more at: https://api.coingecko.com/api/v3/coins/list
+  currency: 'bitcoin'          # ✅ CORRECT: CoinGecko coin ID
+  # currency: 'USD'            # ❌ WRONG: This is a fiat currency
+  # currency: 'BTC'            # ❌ WRONG: This is a ticker symbol
+  
+  fiatcurrency: 'USD'          # Fiat currency for pricing (USD, EUR, GBP, etc.)
+  exchange: 'default'          # Exchange to use ('default' for CoinGecko aggregated prices)
+  updatefrequency: 300         # Update frequency in seconds (minimum 60)
+  sparklinedays: 14            # Days of historical data for price charts
+  coinsperpage: 3              # Number of cryptocurrencies per page
+
+# Multiple cryptocurrencies example (uncomment and modify as needed)
+# ticker:
+#   currency: 'bitcoin,ethereum,litecoin'      # Comma-separated coin IDs
+#   fiatcurrency: 'USD,USD,USD'                # Corresponding fiat currencies
+#   exchange: 'default'
+#   updatefrequency: 300
+#   sparklinedays: 14
+#   coinsperpage: 3
+
+# News headlines settings
 headlines:
-  feedurl: 'https://rss.nytimes.com/services/xml/rss/nyt/US.xml'
-  feedname: "New York Times"
+  feedurl: 'https://rss.nytimes.com/services/xml/rss/nyt/US.xml'  # RSS feed URL
+  feedname: 'New York Times'   # Display name for the news source
+
+# Readwise integration (optional)
 readwise:
-  token: goes_here
-function: # Extra functionality
-  mode: crypto,redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes, stoic, readwise
-  weight: 1, 0, 0, 0, 0, 0, 0, 0 # Weighting for each of the above respectively
+  token: 'your_readwise_token_here'  # Get from https://readwise.io/access_token
+
+# Function selection and weighting
+function:
+  # Available modes: crypto, redditquotes, wordaday, newyorkercartoon, guardianheadlines, textfilequotes, stoic, readwise
+  mode: 'crypto,redditquotes,wordaday,newyorkercartoon,guardianheadlines,textfilequotes,stoic,readwise'
+  # Weights determine how often each mode appears (higher = more frequent)
+  # Set to 0 to disable a mode
+  weight: '10,1,1,1,1,1,1,0'  # Crypto heavily weighted, readwise disabled
+
+# Alternative configurations for different use cases:
+
+# Bitcoin maximalist setup
+# display:
+#   maximalist: true
+#   feedurl: 'https://bitcoinmagazine.com/.rss/full/'
+# ticker:
+#   currency: 'bitcoin'
+#   fiatcurrency: 'USD'
+# function:
+#   mode: 'crypto'
+#   weight: '1'
+
+# Multi-crypto portfolio
+# ticker:
+#   currency: 'bitcoin,ethereum,cardano,solana,chainlink'
+#   fiatcurrency: 'USD,USD,USD,USD,USD'
+#   coinsperpage: 3
+# function:
+#   mode: 'crypto,guardianheadlines'
+#   weight: '5,1'
+
+# Quote and wisdom focused
+# function:
+#   mode: 'redditquotes,stoic,textfilequotes,wordaday'
+#   weight: '3,3,2,2'
