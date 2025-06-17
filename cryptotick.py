@@ -90,7 +90,8 @@ def mempool(img, config, font):
             fontstring=font,
         )
         success = True
-    except:
+    except Exception as e:
+        logging.error(f"Mempool API error: {e}")
         success = False
     return img, success
 
@@ -355,8 +356,8 @@ def redditquotes(img, config):
         while True:
             quote = random.choice(quotestack)
             #   Replace fancypants quotes with vanilla quotes
-            quote = re.sub("“", '"', quote)
-            quote = re.sub("”", '"', quote)
+            quote = re.sub(""", '"', quote)
+            quote = re.sub(""", '"', quote)
             #   Ignore anything in brackets
             quote = re.sub("\[.*?\]", "", quote)
             quote = re.sub("\(.*?\)", "", quote)
@@ -513,7 +514,8 @@ def crypto(img, config):
         time.sleep(0.2)
         success = True
     except Exception as e:
-        message = "Interlude due to a data pull/print problem (Crypto)"
+        message = f"Interlude due to a data pull/print problem (Crypto): {str(e)}"
+        logging.error(message)
         pic = beanaproblem(img, str(e))
         success = False
         time.sleep(10)
@@ -582,10 +584,17 @@ def beanaproblem(image, message):
 
 def getgecko(url):
     try:
-        geckojson = requests.get(url, headers=headers).json()
+        response = requests.get(url, headers=headers, timeout=30)
+        response.raise_for_status()  # Raise an exception for bad status codes
+        geckojson = response.json()
         connectfail = False
+        logging.info(f"API Response received for URL: {url}")
     except requests.exceptions.RequestException as e:
-        logging.error("Issue with CoinGecko")
+        logging.error(f"Issue with CoinGecko API: {e}")
+        connectfail = True
+        geckojson = {}
+    except ValueError as e:
+        logging.error(f"JSON decode error: {e}")
         connectfail = True
         geckojson = {}
     return geckojson, connectfail
@@ -599,7 +608,15 @@ def getData(config):
     num_retries = 5
     crypto_list = currencystringtolist(config["ticker"]["currency"])
     fiat_list = currencystringtolist(config["ticker"]["fiatcurrency"])
+    
+    # Validate crypto_list contains valid coin IDs
+    if not crypto_list or crypto_list == ['']:
+        raise ValueError("No cryptocurrency symbols configured. Check your config.yaml file.")
+    
     logging.info("Getting Data")
+    logging.info(f"Crypto list: {crypto_list}")
+    logging.info(f"Fiat list: {fiat_list}")
+    
     days_ago = int(config["ticker"]["sparklinedays"])
     endtime = int(time.time())
     starttime = endtime - 60 * 60 * 24 * days_ago
@@ -608,13 +625,15 @@ def getData(config):
     allprices = {}
     volumes = {}
     connectbool = False
+    
     for x in range(0, num_retries):
         # Get the price
         for i in range(len(crypto_list)):
             logging.info("i=" + str(i))
-            fiat = fiat_list[i]
+            fiat = fiat_list[i] if i < len(fiat_list) else fiat_list[0]
             whichcoin = crypto_list[i]
-            logging.info(whichcoin)
+            logging.info(f"Processing coin: {whichcoin}, fiat: {fiat}")
+            
             if config["ticker"]["exchange"] == "default":
                 geckourl = (
                     "https://api.coingecko.com/api/v3/coins/markets?vs_currency="
@@ -623,6 +642,15 @@ def getData(config):
                     + whichcoin
                 )
                 rawlivecoin, connectfail = getgecko(geckourl)
+                
+                if connectfail or not rawlivecoin:
+                    logging.error(f"Failed to get live data for {whichcoin}")
+                    continue
+                    
+                if not isinstance(rawlivecoin, list) or len(rawlivecoin) == 0:
+                    logging.error(f"Invalid response format for {whichcoin}: {rawlivecoin}")
+                    continue
+                    
                 liveprice = rawlivecoin[0]
                 pricenow = float(liveprice["current_price"])
                 volumenow = float(liveprice["total_volume"])
@@ -635,13 +663,23 @@ def getData(config):
                     + "&include_exchange_logo=false"
                 )
                 rawlivecoin, connectfail = getgecko(geckourl)
+                
+                if connectfail or not rawlivecoin:
+                    logging.error(f"Failed to get exchange data for {whichcoin}")
+                    continue
+                    
                 theindex = -1
                 upperfiat = fiat.upper()
-                for i in range(len(rawlivecoin["tickers"])):
-                    target = rawlivecoin["tickers"][i]["target"]
+                if "tickers" not in rawlivecoin:
+                    logging.error(f"No tickers in response for {whichcoin}: {rawlivecoin}")
+                    continue
+                    
+                for j in range(len(rawlivecoin["tickers"])):
+                    target = rawlivecoin["tickers"][j]["target"]
                     if target == upperfiat:
-                        theindex = i
-                        logging.debug("Found " + upperfiat + " at index " + str(i))
+                        theindex = j
+                        logging.debug("Found " + upperfiat + " at index " + str(j))
+                        
                 #       if UPPERFIAT is not listed as a target theindex==-1 and it is time to go to sleep
                 if theindex == -1:
                     logging.error(
@@ -668,6 +706,19 @@ def getData(config):
             time.sleep(30)  # a little polite pause to avoid upsetting coingecko
 
             rawtimeseries, connectfail = getgecko(geckourlhistorical)
+            
+            if connectfail or not rawtimeseries:
+                logging.error(f"Failed to get historical data for {whichcoin}")
+                continue
+                
+            # Check if the response contains the expected 'prices' key
+            if "prices" not in rawtimeseries:
+                logging.error(f"API response missing 'prices' key for {whichcoin}. Response: {rawtimeseries}")
+                # Check if there's an error message in the response
+                if "error" in rawtimeseries:
+                    logging.error(f"API Error: {rawtimeseries['error']}")
+                continue
+                
             timeseriesarray = rawtimeseries["prices"]
             timeseriesstack = []
             length = len(timeseriesarray)
@@ -692,8 +743,12 @@ def getData(config):
         else:
             connectbool = False
             break
+            
+    if not allprices:
+        raise ValueError("Could not get any price data after retries. Check your cryptocurrency configuration and internet connection.")
+        
     if connectbool == True:
-        raise ValueError("Goingecko did not return data five times in a row")
+        raise ValueError("CoinGecko did not return data five times in a row")
     return allprices, volumes
 
 
@@ -766,7 +821,7 @@ def updateDisplay(image, config, allprices, volumes):
     for key in allprices.keys():
         logging.info(str("Price: " + key))
         pricenow = allprices[key][-1]
-        fiat = fiat_list[index]
+        fiat = fiat_list[index] if index < len(fiat_list) else fiat_list[0]
         if fiat == "jpy":
             symbolstring = "¥"
         else:
